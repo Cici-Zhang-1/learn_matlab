@@ -51,9 +51,6 @@ function display_roi(currentSlice, img, slice, direction, optimize, maxSlice, ro
 end
 
 function display_roi_un_optimize(BW, currentSlice, img, slice, direction, maxSlice)
-    global showHistory
-    global maxHistory
-    global currentHistory
     global toshow
     tmp = img.CData;
     for i = 1:size(BW, 1)
@@ -103,28 +100,21 @@ function display_roi_un_optimize(BW, currentSlice, img, slice, direction, maxSli
         end
     end
     display_refresh(img, tmp);
-    currentHistory = currentHistory + 1;
-    maxHistory = currentHistory;
-    showHistory(:, :, :, currentHistory) = toshow;
+    save_history(1);
     return
 end
 function display_roi_optimize(BW, currentSlice, img, slice, direction, maxSlice)
-    global showHistory
-    global maxHistory
-    global currentHistory
     global toshow
     tmp = img.CData;
     roiValue = 0; % ROI mean value
     roiStd = 0;
     meanList = [];
-    counts = 0; % ROI pixel counts;
     for i = 1:size(BW, 1)
         for j = 1:size(BW, 2)
             if BW(i, j) == 1
                 tmp(i, j) = 0;
                 if toshow(i, j, currentSlice) > 0
-                    counts = counts + 1;
-                    meanList(counts) = toshow(i, j, currentSlice);
+                    meanList = [meanList toshow(i, j, currentSlice)];
                 end
             end
         end
@@ -175,8 +165,6 @@ function display_roi_optimize(BW, currentSlice, img, slice, direction, maxSlice)
         end
     end
     display_refresh(img, tmp);
-    currentHistory = currentHistory + 1;
-    maxHistory = currentHistory;
-    showHistory(:, :, :, currentHistory) = toshow;
+    save_history(1);
     return
 end
