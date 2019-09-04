@@ -4,7 +4,7 @@ close all;
 % addpath('./vis3d');
 addpath('./NIfTI');
 addpath('./func');
-floder = '/Users/chuangchuangzhang/Downloads/mri/169/';
+floder = '/Users/chuangchuangzhang/Downloads/OneDrive_1_2019-9-4/183/';
 % v = niftiread('172w3.hdr', '172w3.img');
 % 
 % imshow(v(:, :, 128));
@@ -13,7 +13,7 @@ floder = '/Users/chuangchuangzhang/Downloads/mri/169/';
 
 % vis3d('172w3.img')
 
-nii = load_nii([floder '169Skull.img']);
+nii = load_nii([floder '183Skull.img']);
 % nii = load_nii('./updated.img');
 global showHistory
 global minHistory
@@ -91,13 +91,15 @@ b_pixel = uicontrol('Parent', f, 'Style', 'pushbutton', 'Position', [280, 140, 3
               'value', 0, 'min', 0, 'max', 1);
           b_pixel.String = 'Pixel';
           b_pixel.Callback = @(src, event) change_pixel(imgobj, e);
-
-
 % Clear Based on Pixels
 b_auto_pixel = uicontrol('Parent', f, 'Style', 'pushbutton', 'Position', [370, 140, 30, 30], ...
               'value', 0, 'min', 0, 'max', 1);
           b_auto_pixel.String = 'AP';
           b_auto_pixel.Callback = @(src, event) auto_pixel(s, imgobj, e, e_min_piexl, secondD, c_prev_next.Value);
+          
+b_morph = uicontrol('Parent', f, 'Style', 'pushbutton', 'Position', [550, 140, 30, 30], ...
+                'value', 0, 'min', 0, 'max', 1, 'String', 'M');
+            b_morph.Callback = @(s, e) do_morph(imgobj, s.Value);
 % Display Previous Image          
 b_display_previous = uicontrol('Parent', f, 'Style', 'pushbutton', 'Position', [80, 110, 120, 30], ...
               'value', 0, 'min', 0, 'max', 1, 'String', 'Previous');
