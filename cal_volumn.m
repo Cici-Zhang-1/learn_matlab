@@ -5,12 +5,13 @@ height = 0.1;
 width = 0.0625;
 thickness = 0.0625;
 
-filename = 'ZQ175-3W-1';
-xls = readtable(['/Users/chuangchuangzhang/Downloads/' filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true);
+folder = 'F:\T2-1\ZQ175-3W\';
+filename = 'ZQ175-3W';
+xls = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true);
 
 xls{:, :} = xls{:, :} * height * width * thickness;
 header = xls.Properties.VariableNames(:, 1:end);
-writetable(xls, [filename '-Volumn.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
+writetable(xls, [folder filename '-Volumn.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
 
 fw = [];
 fw_header = [];
@@ -39,22 +40,22 @@ end
 fw = array2table(fw);
 fw.Properties.VariableNames = fw_header;
 fw.Properties.RowNames = xls.Properties.RowNames;
-writetable(fw, [filename '-FW.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
+writetable(fw, [folder filename '-FW.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
 
 fh = array2table(fh);
 fh.Properties.VariableNames = fh_header;
 fh.Properties.RowNames = xls.Properties.RowNames;
-writetable(fh, [filename '-FH.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
+writetable(fh, [folder filename '-FH.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
 
 mw = array2table(mw);
 mw.Properties.VariableNames = mw_header;
 mw.Properties.RowNames = xls.Properties.RowNames;
-writetable(mw, [filename '-MW.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
+writetable(mw, [folder filename '-MW.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
 
 mh = array2table(mh);
 mh.Properties.VariableNames = mh_header;
 mh.Properties.RowNames = xls.Properties.RowNames;
-writetable(mh, [filename '-MH.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
+writetable(mh, [folder filename '-MH.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true);
 
 % pixel = table2array(xls(1:end, 6:end));
 % header = xls.Properties.VariableNames(1, 6:end);
