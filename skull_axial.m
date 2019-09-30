@@ -4,7 +4,7 @@ close all;
 % addpath('./vis3d');
 addpath('.\NIfTI');
 addpath('.\func');
-floder = 'F:\T2-1\ZQ175-3W-1\141\';
+floder = 'F:\T2-1\ZQ175-7W\142\';
 % v = niftiread('172w3.hdr', '172w3.img');
 % 
 % imshow(v(:, :, 128));
@@ -13,7 +13,7 @@ floder = 'F:\T2-1\ZQ175-3W-1\141\';
 
 % vis3d('172w3.img')
 
-nii = load_nii([floder 'updated.img']);
+nii = load_nii([floder '142Skull.img']);
 % nii = load_nii('./updated.img');
 global showHistory
 global minHistory
