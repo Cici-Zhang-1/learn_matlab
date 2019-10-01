@@ -1,6 +1,6 @@
 clear
 close all;
-folder = 'F:\T2-1\Analysis\';
+folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
 filename = ['ZQ175-3W-2';'ZQ175-5W-2';'ZQ175-7W-2'];
 MH_Brain = [];
 MW_Brain = [];
@@ -17,7 +17,7 @@ for i = 1:size(filename, 1)
     MW_Brain = MW{'Brain', :};
     FH_Brain = FH{'Brain', :};
     FW_Brain = FW{'Brain', :};
-    [h,p,ci,stats] = ttest2(MH_Brain',MW_Brain', 'Vartype', 'unequal');
+    [h,p,ci,stats] = ttest2((MH_Brain + FH_Brain)',(MW_Brain + FW_Brain)', 'Vartype', 'unequal');
     disp([filename(i, :),'p: ', num2str(p), ', h: ', num2str(h), ', tstat: ', num2str(stats.tstat)]);
 end
 
