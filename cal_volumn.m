@@ -6,8 +6,8 @@ width = 0.0625;
 thickness = 0.0625;
 
 folder = 'F:\T2-1\Analysis\';
-filename = 'ZQ175-3W-2';
-xls = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true);
+filename = 'ZQ175-5W-3';
+xls = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'ROI');
 
 
 C = cell(1, size(xls, 2));
@@ -20,7 +20,7 @@ names_L = {'CaudatePutamen_L', 'Neocortex_L', ...
 names_R = {'CaudatePutamen_R', 'Neocortex_R', ...
     'Cerebellum_R', 'Thalamus_R', 'PeriformCortex_R', 'Hypothalamus_R', 'CC/ExternalCapsule_R'};
 
-xls{:, :} = xls{:, :} * height * width * thickness;
+xls{:, :} = round(xls{:, :} * height * width * thickness, 3);
 header = xls.Properties.VariableNames(:, 1:end);
 volumns = table('Size', [size(names_L, 2) * 2 size(header, 2)], 'VariableTypes', C,...
     'VariableNames', xls.Properties.VariableNames);
