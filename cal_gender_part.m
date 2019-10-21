@@ -20,11 +20,14 @@ for i = 1:size(filename, 1)
     FW_Part(1, i) = mean(FW{type, :}, 2);
 end
 
+HD = (MH_Part + FH_Part)/2;
+WT = (MW_Part + FW_Part)/2;
+
 x = [21, 35, 49];
 figure;
-plot(x, MH_Part, 'k+', x, MW_Part, 'ro', x, FH_Part, 'g*', x, FW_Part, 'bs');
+plot(x, HD, 'k+', x, WT, 'ro');
 
-title('Corpus Callosum/ExternalCapsule');
+title(type);
 
 xlim([20 50]);
 % ylim([16 20]);
@@ -34,37 +37,23 @@ xticks([21 35 49])
 xlabel('Days');
 ylabel('Volumn(mm^3)');
 
-p = polyfit(x, MH_Part, 2);
+p = polyfit(x, HD, 2);
 x1 = linspace(21,49)';
-yMH = polyval(p,x1);
+yHD = polyval(p,x1);
 hold on
-p1 = plot(x1,yMH, 'k');
+p1 = plot(x1,yHD, 'k');
 hold off
 
-p = polyfit(x, MW_Part, 2);
+p = polyfit(x, WT, 2);
 x1 = linspace(21,49)';
-yMW = polyval(p,x1);
+yWT = polyval(p,x1);
 hold on
-p2 = plot(x1,yMW, 'r');
+p2 = plot(x1,yWT, 'r');
 hold off
 
-p = polyfit(x, FH_Part, 2);
-x1 = linspace(21,49)';
-yFH = polyval(p,x1);
-hold on
-p3 = plot(x1,yFH, 'g');
-hold off
+legend([p1 p2],{'HD', 'WT'}, 'Location', 'northeastoutside');
 
-p = polyfit(x, FW_Part, 2);
-x1 = linspace(21,49)';
-yFW = polyval(p,x1);
-hold on
-p4 = plot(x1,yFW, 'b');
-hold off
-
-legend([p1 p2 p3 p4],{'MH', 'MW', 'FH', 'FW'}, 'Location', 'northeastoutside');
-
-saveas(gcf,sprintf('%s.png', 'CC_ExternalCapsule'))
+saveas(gcf,sprintf('HD_WT_%s.png', type))
 
 % legend('MH', 'MW', 'FH', 'FW', 'MH-', 'MW-', 'FH-', 'FW-');
 

@@ -20,10 +20,12 @@ for i = 1:size(filename, 1)
     FW_Brain(1, i) = mean(FW{'Brain', :}, 2);
 end
 
+HD = (MH_Brain + FH_Brain) / 2;
+WT = (MW_Brain + FW_Brain) / 2;
 type = 'Brain Volumn Trend';
 x = [21, 35, 49];
 figure;
-plot(x, MH_Brain, 'k+', x, MW_Brain, 'ro', x, FH_Brain, 'g*', x, FW_Brain, 'bs');
+plot(x, HD, 'k+', x, WT, 'ro');
 title(type);
 
 xlim([20 50]);
@@ -34,35 +36,20 @@ xticks([21 35 49])
 xlabel('Days');
 ylabel('Volumn(mm^3)');
 
-p = polyfit(x, MH_Brain, 2);
+p = polyfit(x, HD, 2);
 x1 = linspace(21,49)';
 yMH = polyval(p,x1);
 hold on
 p1 = plot(x1,yMH, 'k');
 hold off
 
-p = polyfit(x, MW_Brain, 2);
+p = polyfit(x, WT, 2);
 x1 = linspace(21,49)';
-yMW = polyval(p,x1);
+yWT = polyval(p,x1);
 hold on
-p2 = plot(x1,yMW, 'r');
+p2 = plot(x1,yWT, 'r');
 hold off
 
-p = polyfit(x, FH_Brain, 2);
-x1 = linspace(21,49)';
-yFH = polyval(p,x1);
-hold on
-p3 = plot(x1,yFH, 'g');
-hold off
+legend([p1 p2],{'MH', 'MW'}, 'Location', 'northeastoutside');
 
-p = polyfit(x, FW_Brain, 2);
-x1 = linspace(21,49)';
-yFW = polyval(p,x1);
-hold on
-p4 = plot(x1,yFW, 'b');
-hold off
-
-legend([p1 p2 p3 p4],{'MH', 'MW', 'FH', 'FW'}, 'Location', 'northeastoutside');
-
-saveas(gcf,sprintf('%s.png', type))
-
+saveas(gcf,sprintf('HD_WT_%s.png', type))
