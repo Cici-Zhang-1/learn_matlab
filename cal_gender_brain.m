@@ -1,6 +1,6 @@
 clear
 close all;
-folder = 'F:\T2-1\Analysis\';
+folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
 filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
 no = '2';
 MH_Brain = [];
@@ -50,6 +50,6 @@ hold on
 p2 = plot(x1,yWT, 'r');
 hold off
 
-legend([p1 p2],{'MH', 'MW'}, 'Location', 'northeastoutside');
+legend([p1 p2],{'HD', 'WT'}, 'Location', 'northeastoutside');
 
 saveas(gcf,sprintf('HD_WT_%s.png', type))

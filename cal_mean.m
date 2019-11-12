@@ -4,7 +4,7 @@ close all;
 folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
 filename = 'ZQ175-7W-2';
 header = {'MH', 'MW', 'FH', 'FW', 'MH_std', 'MW_std', 'FH_std', 'FW_std', 'MH_MW_P_Value', 'FH_FW_P_Value', 'M_F_P_Value'};
-names = {'brain', 'CaudatePutamen', 'Neocortex', ...
+names = {'Brain', 'CaudatePutamen', 'Neocortex', ...
     'Cerebellum', 'Thalamus', 'PeriformCortex', 'Hypothalamus', 'CC/ExternalCapsule'};
 C = cell(1, size(header, 2));
 C(:) = {'double'};
@@ -20,112 +20,117 @@ MH = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNam
 MW = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW');
 FH = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FH');
 FW = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW');
-mean_value.MH(1) = mean(MH{'Brain', :}, 2);
-mean_value.MH_std(1) = std(MH{'Brain', :});
-mean_value.MW(1) = mean(MW{'Brain', :}, 2);
-mean_value.MW_std(1) = std(MW{'Brain', :});
-mean_value.FH(1) = mean(FH{'Brain', :}, 2);
-mean_value.FH_std(1) = std(FH{'Brain', :});
-mean_value.FW(1) = mean(FW{'Brain', :}, 2);
-mean_value.FW_std(1) = std(FW{'Brain', :});
+mean_value.MH(1) = round(mean(MH{'Brain', :}, 2), 3);
+mean_value.MH_std(1) = round(std(MH{'Brain', :}), 3);
+mean_value.MW(1) = round(mean(MW{'Brain', :}, 2), 3);
+mean_value.MW_std(1) = round(std(MW{'Brain', :}), 3);
+mean_value.FH(1) = round(mean(FH{'Brain', :}, 2), 3);
+mean_value.FH_std(1) = round(std(FH{'Brain', :}), 3);
+mean_value.FW(1) = round(mean(FW{'Brain', :}, 2), 3);
+mean_value.FW_std(1) = round(std(FW{'Brain', :}), 3);
 [h,mean_value.MH_MW_P_Value(1),ci,stats] = ttest2(MH{'Brain', :}',MW{'Brain', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(1),ci,stats] = ttest2(FH{'Brain', :}',FW{'Brain', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(1),ci,stats] = ttest2((MH{'Brain', :} + FH{'Brain', :})',(MW{'Brain', :} + FW{'Brain', :})', 'Vartype', 'unequal');
+
 
 MH_Combine = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH_Combine');
 MW_Combine = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
 FH_Combine = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FH_Combine');
 FW_Combine = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
-mean_value.MH(2) = mean(MH_Combine{'CaudatePutamen', :}, 2);
-mean_value.MH_std(2) = std(MH_Combine{'CaudatePutamen', :});
-mean_value.MW(2) = mean(MW_Combine{'CaudatePutamen', :}, 2);
-mean_value.MW_std(2) = std(MW_Combine{'CaudatePutamen', :});
-mean_value.FH(2) = mean(FH_Combine{'CaudatePutamen', :}, 2);
-mean_value.FH_std(2) = std(FH_Combine{'CaudatePutamen', :});
-mean_value.FW(2) = mean(FW_Combine{'CaudatePutamen', :}, 2);
-mean_value.FW_std(2) = std(FW_Combine{'CaudatePutamen', :});
+mean_value.MH(2) = round(mean(MH_Combine{'CaudatePutamen', :}, 2), 3);
+mean_value.MH_std(2) = round(std(MH_Combine{'CaudatePutamen', :}), 3);
+mean_value.MW(2) = round(mean(MW_Combine{'CaudatePutamen', :}, 2), 3);
+mean_value.MW_std(2) = round(std(MW_Combine{'CaudatePutamen', :}), 3);
+mean_value.FH(2) = round(mean(FH_Combine{'CaudatePutamen', :}, 2), 3);
+mean_value.FH_std(2) = round(std(FH_Combine{'CaudatePutamen', :}), 3);
+mean_value.FW(2) = round(mean(FW_Combine{'CaudatePutamen', :}, 2), 3);
+mean_value.FW_std(2) = round(std(FW_Combine{'CaudatePutamen', :}), 3);
 [h,mean_value.MH_MW_P_Value(2),ci,stats] = ttest2(MH_Combine{'CaudatePutamen', :}',MW_Combine{'CaudatePutamen', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(2),ci,stats] = ttest2(FH_Combine{'CaudatePutamen', :}',FW_Combine{'CaudatePutamen', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(2),ci,stats] = ttest2((MH_Combine{'CaudatePutamen', :} + FH_Combine{'CaudatePutamen', :})',...
     (MW_Combine{'CaudatePutamen', :} + FW_Combine{'CaudatePutamen', :})', 'Vartype', 'unequal');
 
-mean_value.MH(3) = mean(MH_Combine{'Neocortex', :}, 2);
-mean_value.MH_std(3) = std(MH_Combine{'Neocortex', :});
-mean_value.MW(3) = mean(MW_Combine{'Neocortex', :}, 2);
-mean_value.MW_std(3) = std(MW_Combine{'Neocortex', :});
-mean_value.FH(3) = mean(FH_Combine{'Neocortex', :}, 2);
-mean_value.FH_std(3) = std(FH_Combine{'Neocortex', :});
-mean_value.FW(3) = mean(FW_Combine{'Neocortex', :}, 2);
-mean_value.FW_std(3) = std(FW_Combine{'Neocortex', :});
+mean_value.MH(3) = round(mean(MH_Combine{'Neocortex', :}, 2), 3);
+mean_value.MH_std(3) = round(std(MH_Combine{'Neocortex', :}), 3);
+mean_value.MW(3) = round(mean(MW_Combine{'Neocortex', :}, 2), 3);
+mean_value.MW_std(3) = round(std(MW_Combine{'Neocortex', :}), 3);
+mean_value.FH(3) = round(mean(FH_Combine{'Neocortex', :}, 2), 3);
+mean_value.FH_std(3) = round(std(FH_Combine{'Neocortex', :}), 3);
+mean_value.FW(3) = round(mean(FW_Combine{'Neocortex', :}, 2), 3);
+mean_value.FW_std(3) = round(std(FW_Combine{'Neocortex', :}), 3);
 [h,mean_value.MH_MW_P_Value(3),ci,stats] = ttest2(MH_Combine{'Neocortex', :}',MW_Combine{'Neocortex', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(3),ci,stats] = ttest2(FH_Combine{'Neocortex', :}',FW_Combine{'Neocortex', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(3),ci,stats] = ttest2((MH_Combine{'Neocortex', :} + FH_Combine{'Neocortex', :})',...
     (MW_Combine{'Neocortex', :} + FW_Combine{'Neocortex', :})', 'Vartype', 'unequal');
 
-mean_value.MH(4) = mean(MH_Combine{'Cerebellum', :}, 2);
-mean_value.MH_std(4) = std(MH_Combine{'Cerebellum', :});
-mean_value.MW(4) = mean(MW_Combine{'Cerebellum', :}, 2);
-mean_value.MW_std(4) = std(MW_Combine{'Cerebellum', :});
-mean_value.FH(4) = mean(FH_Combine{'Cerebellum', :}, 2);
-mean_value.FH_std(4) = std(FH_Combine{'Cerebellum', :});
-mean_value.FW(4) = mean(FW_Combine{'Cerebellum', :}, 2);
-mean_value.FW_std(4) = std(FW_Combine{'Cerebellum', :});
+mean_value.MH(4) = round(mean(MH_Combine{'Cerebellum', :}, 2), 3);
+mean_value.MH_std(4) = round(std(MH_Combine{'Cerebellum', :}), 3);
+mean_value.MW(4) = round(mean(MW_Combine{'Cerebellum', :}, 2), 3);
+mean_value.MW_std(4) = round(std(MW_Combine{'Cerebellum', :}), 3);
+mean_value.FH(4) = round(mean(FH_Combine{'Cerebellum', :}, 2), 3);
+mean_value.FH_std(4) = round(std(FH_Combine{'Cerebellum', :}), 3);
+mean_value.FW(4) = round(mean(FW_Combine{'Cerebellum', :}, 2), 3);
+mean_value.FW_std(4) = round(std(FW_Combine{'Cerebellum', :}), 3);
 [h,mean_value.MH_MW_P_Value(4),ci,stats] = ttest2(MH_Combine{'Cerebellum', :}',MW_Combine{'Cerebellum', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(4),ci,stats] = ttest2(FH_Combine{'Cerebellum', :}',FW_Combine{'Cerebellum', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(4),ci,stats] = ttest2((MH_Combine{'Cerebellum', :} + FH_Combine{'Cerebellum', :})',...
     (MW_Combine{'Cerebellum', :} + FW_Combine{'Cerebellum', :})', 'Vartype', 'unequal');
 
-mean_value.MH(5) = mean(MH_Combine{'Thalamus', :}, 2);
-mean_value.MH_std(5) = std(MH_Combine{'Thalamus', :});
-mean_value.MW(5) = mean(MW_Combine{'Thalamus', :}, 2);
-mean_value.MW_std(5) = std(MW_Combine{'Thalamus', :});
-mean_value.FH(5) = mean(FH_Combine{'Thalamus', :}, 2);
-mean_value.FH_std(5) = std(FH_Combine{'Thalamus', :});
-mean_value.FW(5) = mean(FW_Combine{'Thalamus', :}, 2);
-mean_value.FW_std(5) = std(FW_Combine{'Thalamus', :});
+mean_value.MH(5) = round(mean(MH_Combine{'Thalamus', :}, 2), 3);
+mean_value.MH_std(5) = round(std(MH_Combine{'Thalamus', :}), 3);
+mean_value.MW(5) = round(mean(MW_Combine{'Thalamus', :}, 2), 3);
+mean_value.MW_std(5) = round(std(MW_Combine{'Thalamus', :}), 3);
+mean_value.FH(5) = round(mean(FH_Combine{'Thalamus', :}, 2), 3);
+mean_value.FH_std(5) = round(std(FH_Combine{'Thalamus', :}), 3);
+mean_value.FW(5) = round(mean(FW_Combine{'Thalamus', :}, 2), 3);
+mean_value.FW_std(5) = round(std(FW_Combine{'Thalamus', :}), 3);
 [h,mean_value.MH_MW_P_Value(5),ci,stats] = ttest2(MH_Combine{'Thalamus', :}',MW_Combine{'Thalamus', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(5),ci,stats] = ttest2(FH_Combine{'Thalamus', :}',FW_Combine{'Thalamus', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(5),ci,stats] = ttest2((MH_Combine{'Thalamus', :} + FH_Combine{'Thalamus', :})',...
     (MW_Combine{'Thalamus', :} + FW_Combine{'Thalamus', :})', 'Vartype', 'unequal');
 
-mean_value.MH(6) = mean(MH_Combine{'PeriformCortex', :}, 2);
-mean_value.MH_std(6) = std(MH_Combine{'PeriformCortex', :});
-mean_value.MW(6) = mean(MW_Combine{'PeriformCortex', :}, 2);
-mean_value.MW_std(6) = std(MW_Combine{'PeriformCortex', :});
-mean_value.FH(6) = mean(FH_Combine{'PeriformCortex', :}, 2);
-mean_value.FH_std(6) = std(FH_Combine{'PeriformCortex', :});
-mean_value.FW(6) = mean(FW_Combine{'PeriformCortex', :}, 2);
-mean_value.FW_std(6) = std(FW_Combine{'PeriformCortex', :});
+mean_value.MH(6) = round(mean(MH_Combine{'PeriformCortex', :}, 2), 3);
+mean_value.MH_std(6) = round(std(MH_Combine{'PeriformCortex', :}), 3);
+mean_value.MW(6) = round(mean(MW_Combine{'PeriformCortex', :}, 2), 3);
+mean_value.MW_std(6) = round(std(MW_Combine{'PeriformCortex', :}), 3);
+mean_value.FH(6) = round(mean(FH_Combine{'PeriformCortex', :}, 2), 3);
+mean_value.FH_std(6) = round(std(FH_Combine{'PeriformCortex', :}), 3);
+mean_value.FW(6) = round(mean(FW_Combine{'PeriformCortex', :}, 2), 3);
+mean_value.FW_std(6) = round(std(FW_Combine{'PeriformCortex', :}), 3);
 [h,mean_value.MH_MW_P_Value(6),ci,stats] = ttest2(MH_Combine{'PeriformCortex', :}',MW_Combine{'PeriformCortex', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(6),ci,stats] = ttest2(FH_Combine{'PeriformCortex', :}',FW_Combine{'PeriformCortex', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(6),ci,stats] = ttest2((MH_Combine{'PeriformCortex', :} + FH_Combine{'PeriformCortex', :})',...
     (MW_Combine{'PeriformCortex', :} + FW_Combine{'PeriformCortex', :})', 'Vartype', 'unequal');
 
-mean_value.MH(7) = mean(MH_Combine{'Hypothalamus', :}, 2);
-mean_value.MH_std(7) = std(MH_Combine{'Hypothalamus', :});
-mean_value.MW(7) = mean(MW_Combine{'Hypothalamus', :}, 2);
-mean_value.MW_std(7) = std(MW_Combine{'Hypothalamus', :});
-mean_value.FH(7) = mean(FH_Combine{'Hypothalamus', :}, 2);
-mean_value.FH_std(7) = std(FH_Combine{'Hypothalamus', :});
-mean_value.FW(7) = mean(FW_Combine{'Hypothalamus', :}, 2);
-mean_value.FW_std(7) = std(FW_Combine{'Hypothalamus', :});
+mean_value.MH(7) = round(mean(MH_Combine{'Hypothalamus', :}, 2), 3);
+mean_value.MH_std(7) = round(std(MH_Combine{'Hypothalamus', :}), 3);
+mean_value.MW(7) = round(mean(MW_Combine{'Hypothalamus', :}, 2), 3);
+mean_value.MW_std(7) = round(std(MW_Combine{'Hypothalamus', :}), 3);
+mean_value.FH(7) = round(mean(FH_Combine{'Hypothalamus', :}, 2), 3);
+mean_value.FH_std(7) = round(std(FH_Combine{'Hypothalamus', :}), 3);
+mean_value.FW(7) = round(mean(FW_Combine{'Hypothalamus', :}, 2), 3);
+mean_value.FW_std(7) = round(std(FW_Combine{'Hypothalamus', :}), 3);
 [h,mean_value.MH_MW_P_Value(7),ci,stats] = ttest2(MH_Combine{'Hypothalamus', :}',MW_Combine{'Hypothalamus', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(7),ci,stats] = ttest2(FH_Combine{'Hypothalamus', :}',FW_Combine{'Hypothalamus', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(7),ci,stats] = ttest2((MH_Combine{'Hypothalamus', :} + FH_Combine{'Hypothalamus', :})',...
     (MW_Combine{'Hypothalamus', :} + FW_Combine{'Hypothalamus', :})', 'Vartype', 'unequal');
 
-mean_value.MH(8) = mean(MH_Combine{'CC/ExternalCapsule', :}, 2);
-mean_value.MH_std(8) = std(MH_Combine{'CC/ExternalCapsule', :});
-mean_value.MW(8) = mean(MW_Combine{'CC/ExternalCapsule', :}, 2);
-mean_value.MW_std(8) = std(MW_Combine{'CC/ExternalCapsule', :});
-mean_value.FH(8) = mean(FH_Combine{'CC/ExternalCapsule', :}, 2);
-mean_value.FH_std(8) = std(FH_Combine{'CC/ExternalCapsule', :});
-mean_value.FW(8) = mean(FW_Combine{'CC/ExternalCapsule', :}, 2);
-mean_value.FW_std(8) = std(FW_Combine{'CC/ExternalCapsule', :});
+mean_value.MH(8) = round(mean(MH_Combine{'CC/ExternalCapsule', :}, 2), 3);
+mean_value.MH_std(8) = round(std(MH_Combine{'CC/ExternalCapsule', :}), 3);
+mean_value.MW(8) = round(mean(MW_Combine{'CC/ExternalCapsule', :}, 2), 3);
+mean_value.MW_std(8) = round(std(MW_Combine{'CC/ExternalCapsule', :}), 3);
+mean_value.FH(8) = round(mean(FH_Combine{'CC/ExternalCapsule', :}, 2), 3);
+mean_value.FH_std(8) = round(std(FH_Combine{'CC/ExternalCapsule', :}), 3);
+mean_value.FW(8) = round(mean(FW_Combine{'CC/ExternalCapsule', :}, 2), 3);
+mean_value.FW_std(8) = round(std(FW_Combine{'CC/ExternalCapsule', :}), 3);
 [h,mean_value.MH_MW_P_Value(8),ci,stats] = ttest2(MH_Combine{'CC/ExternalCapsule', :}',MW_Combine{'CC/ExternalCapsule', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(8),ci,stats] = ttest2(FH_Combine{'CC/ExternalCapsule', :}',FW_Combine{'CC/ExternalCapsule', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(8),ci,stats] = ttest2((MH_Combine{'CC/ExternalCapsule', :} + FH_Combine{'CC/ExternalCapsule', :})',...
     (MW_Combine{'CC/ExternalCapsule', :} + FW_Combine{'CC/ExternalCapsule', :})', 'Vartype', 'unequal');
+
+mean_value.MH_MW_P_Value = round(mean_value.MH_MW_P_Value, 3);
+mean_value.FH_FW_P_Value = round(mean_value.FH_FW_P_Value, 3);
+mean_value.M_F_P_Value = round(mean_value.M_F_P_Value, 3);
 
 writetable(mean_value, [folder filename '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'Mean');
 
