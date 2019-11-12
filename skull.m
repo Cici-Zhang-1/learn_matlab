@@ -2,9 +2,9 @@ clear;
 close all;
 
 % addpath('./vis3d');
-addpath('./NIfTI');
-addpath('./func');
-floder = '/Users/chuangchuangzhang/Downloads/OneDrive_1_2019-9-4/183/';
+addpath('.\NIfTI');
+addpath('.\func');
+floder = 'F:\T2-2\ZQ175-5W\141\';
 % v = niftiread('172w3.hdr', '172w3.img');
 % 
 % imshow(v(:, :, 128));
@@ -13,7 +13,7 @@ floder = '/Users/chuangchuangzhang/Downloads/OneDrive_1_2019-9-4/183/';
 
 % vis3d('172w3.img')
 
-nii = load_nii([floder '183Skull.img']);
+nii = load_nii([floder '141Skull.img']);
 % nii = load_nii('./updated.img');
 global showHistory
 global minHistory

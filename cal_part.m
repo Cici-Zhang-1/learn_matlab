@@ -8,7 +8,7 @@ MW_Part = [];
 FH_Part = [];
 FW_Part = [];
 % CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'CC/ExternalCapsule';
+type = 'CaudatePutamen';
 for i = 1:size(filename, 1)
     MH = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH_combine');
     MW = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_combine');
@@ -24,7 +24,7 @@ x = [21, 35, 49];
 figure;
 plot(x, MH_Part, 'k+', x, MW_Part, 'ro', x, FH_Part, 'g*', x, FW_Part, 'bs');
 
-title('Corpus Callosum/ExternalCapsule');
+title(type);
 
 xlim([20 50]);
 % ylim([16 20]);
@@ -64,7 +64,7 @@ hold off
 
 legend([p1 p2 p3 p4],{'MH', 'MW', 'FH', 'FW'}, 'Location', 'northeastoutside');
 
-saveas(gcf,sprintf('%s.png', 'CC_ExternalCapsule'))
+saveas(gcf,sprintf('%s.png', type))
 
 % legend('MH', 'MW', 'FH', 'FW', 'MH-', 'MW-', 'FH-', 'FW-');
 
