@@ -41,25 +41,13 @@ hold on
 p1 = plot(x1,yMH, 'k');
 hold off
 
-p = polyfit(x, MW_Part, 2);
-x1 = linspace(21,49)';
-yMW = polyval(p,x1);
-hold on
-p2 = plot(x1,yMW, 'r');
-hold off
+xconf = [x1' x1(end:-1:1)'] ;         
+yconf = [yMH'+0.15 yMH(end:-1:1)'-0.15];
 
-p = polyfit(x, FH_Part, 2);
-x1 = linspace(21,49)';
-yFH = polyval(p,x1);
 hold on
-p3 = plot(x1,yFH, 'g');
-hold off
-
-p = polyfit(x, FW_Part, 2);
-x1 = linspace(21,49)';
-yFW = polyval(p,x1);
-hold on
-p4 = plot(x1,yFW, 'b');
+pC = fill(xconf,yconf,'red');
+pC.FaceColor = [1 0.8 0.8];      
+pC.EdgeColor = 'none'; 
 hold off
 
 legend([p1 p2 p3 p4],{'MH', 'MW', 'FH', 'FW'}, 'Location', 'northeastoutside');
