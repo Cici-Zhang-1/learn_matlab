@@ -5,8 +5,8 @@ height = 0.1;
 width = 0.0625;
 thickness = 0.0625;
 
-folder = 'F:\T2-1\Analysis\';
-filename = 'ZQ175-5W-3';
+folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+filename = 'ZQ175-7W-2';
 xls = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'ROI');
 
 
