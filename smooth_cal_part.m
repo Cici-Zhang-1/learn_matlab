@@ -1,6 +1,13 @@
 clear
 close all;
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+if ispc
+    folder = 'F:\T2-1\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
+
 filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
 no = '2';
 MH_Part = [];
@@ -9,12 +16,6 @@ MH_Down_Part = [];
 MW_Part = [];
 MW_Up_Part = [];
 MW_Down_Part = [];
-FH_Part = [];
-FH_Up_Part = [];
-FH_Down_Part = [];
-FW_Part = [];
-FW_Up_Part = [];
-FW_Down_Part = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 type = 'CC/ExternalCapsule';
 for i = 1:size(filename, 1)
@@ -27,21 +28,13 @@ for i = 1:size(filename, 1)
     t = Mean{type, 'MW_std'};
     MW_Up_Part(1, i) = MW_Part(1, i) + t;
     MW_Down_Part(1, i) = MW_Part(1, i) - t;
-    FH_Part(1, i) = Mean{type, 'FH'};
-    t = Mean{type, 'FH_std'};
-    FH_Up_Part(1, i) = FH_Part(1, i) + t;
-    FH_Down_Part(1, i) = FH_Part(1, i) - t;
-    FW_Part(1, i) = Mean{type, 'FW'};
-    t = Mean{type, 'FW_std'};
-    FW_Up_Part(1, i) = FW_Part(1, i) + t;
-    FW_Down_Part(1, i) = FW_Part(1, i) - t;
 end
 
 x = [21, 35, 49];
 figure;
 
 x1 = linspace(21,49)';
-smoothtype = 'smoothingspline';
+smoothtype = 'poly2';
 %MW
 [cMW, gof, output] = fit(x', MW_Part', smoothtype);
 yMW = feval(cMW, x1);
@@ -83,15 +76,47 @@ hold on
 p2 = plot(x1,yMH, 'Color', [0.9 0.38 0.38], 'LineWidth', 3);
 hold off
 
-title(['Male ' type]);
 xlim([20 50]);
-xticks([21 35 49])
-xlabel('Days');
-ylabel('Volumn(mm^3)');
+xticks([21 35 49]);
+% Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+if strcmp(type, 'CaudatePutamen')
+%     ylim([14 22]);
+    ylim([16 21]);
+elseif strcmp(type, 'Neocortex')
+%     ylim([70 110])
+    ylim([75 100]);
+elseif strcmp(type, 'Cerebellum')
+%     ylim([30 70]);
+    ylim([40 60]);
+elseif strcmp(type, 'Thalamus')
+%     ylim([15 28]);
+    ylim([18 24]);
+elseif strcmp(type, 'PeriformCortex')
+    ylim([1 5]);
+elseif strcmp(type, 'Hypothalamus')
+    ylim([6 16]);
+elseif strcmp(type, 'CC/ExternalCapsule')
+    ylim([8 16]);
+elseif strcmp(type, 'Brain')
+    ylim([350 500]);
+else
+end
+% ylim([15 25]);
+xlabel('Days', 'FontSize', 18);
+ylabel('Volumn(mm^3)', 'FontSize', 18);
 
-legend([p1 p2],{'MW', 'MH'}, 'Location', 'northeastoutside');
+ax = gca; % current axes
+ax.FontSize = 16;
 
-saveas(gcf,sprintf('M_%s.png', 'CC_ExternalCapsule'))
+lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
+legend('boxoff');
+title(lgd, ['Male ' type]);
+
+if strcmp(type, 'CC/ExternalCapsule')
+    saveas(gcf,sprintf('M_%s.png', 'CC_ExternalCapsule'))
+else
+    saveas(gcf,sprintf('M_%s.png', type))
+end
 
 % legend('MH', 'MW', 'FH', 'FW', 'MH-', 'MW-', 'FH-', 'FW-');
 

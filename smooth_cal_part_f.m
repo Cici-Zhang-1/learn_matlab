@@ -1,14 +1,15 @@
 clear
 close all;
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+if ispc
+    folder = 'F:\T2-1\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
 filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
 no = '2';
-MH_Part = [];
-MH_Up_Part = [];
-MH_Down_Part = [];
-MW_Part = [];
-MW_Up_Part = [];
-MW_Down_Part = [];
+
 FH_Part = [];
 FH_Up_Part = [];
 FH_Down_Part = [];
@@ -16,7 +17,7 @@ FW_Part = [];
 FW_Up_Part = [];
 FW_Down_Part = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'CC/ExternalCapsule';
+type = 'CaudatePutamen';
 for i = 1:size(filename, 1)
     Mean = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'Mean');
     FH_Part(1, i) = Mean{type, 'FH'};
@@ -75,15 +76,45 @@ hold on
 p2 = plot(x1,yMH, 'Color', [0.69 0.164 0.531], 'LineWidth', 3);
 hold off
 
-title(['Female ' type]);
 xlim([20 50]);
-xticks([21 35 49])
-xlabel('Days');
-ylabel('Volumn(mm^3)');
+xticks([21 35 49]);
+if strcmp(type, 'CaudatePutamen')
+%     ylim([14 22]);
+    ylim([16 21]);
+elseif strcmp(type, 'Neocortex')
+    ylim([70 110])
+%     ylim([75 100]);
+elseif strcmp(type, 'Cerebellum')
+%     ylim([30 70]);
+    ylim([40 60]);
+elseif strcmp(type, 'Thalamus')
+    ylim([15 28]);
+%     ylim([18 24]);
+elseif strcmp(type, 'PeriformCortex')
+    ylim([1 5]);
+elseif strcmp(type, 'Hypothalamus')
+    ylim([6 16]);
+elseif strcmp(type, 'CC/ExternalCapsule')
+    ylim([8 16]);
+elseif strcmp(type, 'Brain')
+    ylim([350 500]);
+else
+end
+xlabel('Days', 'FontSize', 18);
+ylabel('Volumn(mm^3)', 'FontSize', 18);
 
-legend([p1 p2],{'FW', 'FH'}, 'Location', 'northeastoutside');
+ax = gca; % current axes
+ax.FontSize = 16;
 
-saveas(gcf,sprintf('F_%s.png', 'CC_ExternalCapsule'))
+lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
+legend('boxoff');
+title(lgd, ['Female ' type]);
+
+if strcmp(type, 'CC/ExternalCapsule')
+    saveas(gcf,sprintf('F_%s.png', 'CC_ExternalCapsule'));
+else
+    saveas(gcf,sprintf('F_%s.png', type));
+end
 
 % legend('MH', 'MW', 'FH', 'FW', 'MH-', 'MW-', 'FH-', 'FW-');
 

@@ -1,8 +1,15 @@
 clear;
 close all;
+% cal mean value
+if ispc
+    folder = 'F:\T2-1\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
 
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
-filename = 'ZQ175-5W-2';
+filename = 'ZQ175-7W-2';
 header = {'MH', 'MW', 'FH', 'FW', 'MH_std', 'MW_std', 'FH_std', 'FW_std', 'MH_MW_P_Value', 'FH_FW_P_Value', 'M_F_P_Value'};
 names = {'Brain', 'CaudatePutamen', 'Neocortex', ...
     'Cerebellum', 'Thalamus', 'PeriformCortex', 'Hypothalamus', 'CC/ExternalCapsule'};
