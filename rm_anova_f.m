@@ -13,19 +13,19 @@ end
 
 filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
 no = '2';
-MW_Combine = [];
-MH_Combine = [];
+FW_Combine = [];
+FH_Combine = [];
 Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'CaudatePutamen';
+type = 'CC/ExternalCapsule';
 for i = 1:size(filename, 1)
-    MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
-    MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH_Combine');
-    Combine(1:size(MW_Combine, 2), i) = MW_Combine{type, :};
-    Combine(size(MW_Combine, 2) + 1: size(MW_Combine, 2) + size(MH_Combine, 2), i) = MH_Combine{type, :};
+    FW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
+    FH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FH_Combine');
+    Combine(1:size(FW_Combine, 2), i) = FW_Combine{type, :};
+    Combine(size(FW_Combine, 2) + 1: size(FW_Combine, 2) + size(FH_Combine, 2), i) = FH_Combine{type, :};
 end
 
-Model = {'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD'}';
+Model = {'FWT' 'FWT' 'FWT' 'FWT' 'FWT' 'FWT' 'FHD' 'FHD' 'FHD' 'FHD' 'FHD' 'FHD'}';
 
 Time = [21 35 49]';
 

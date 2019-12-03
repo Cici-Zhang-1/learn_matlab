@@ -1,12 +1,89 @@
 clear;
 close all;
-Y = [11, 12, 13, 11, 15, 12, 13, 14, 12]';
-S = [1, 2, 3, 4, 5, 6, 7, 8, 9]';
-F1 = [1, 2, 3, 1, 2, 3, 1, 2, 3]';
-F2 = [1, 1, 1, 2, 2, 2, 3, 3, 3]';
-FACTNAMES = {'Days', 'Type'};
-stats = rm_anova2(Y,S,F1,F2,FACTNAMES);
+if ispc
+    folder = 'F:\T2-1\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
+
+filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
+no = '2';
+MW_Combine = [];
+MH_Combine = [];
+Combine = [];
+% Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+type = 'Brain';
+starts = 1;
+ends = 0;
+for i = 1:size(filename, 1)
+    MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW');
+    MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH');
+    ends = ends + size(MW_Combine, 2);
+    Combine(starts : ends, 1) = MW_Combine{type, :};
+    starts = ends + 1;
+    ends = ends + size(MW_Combine, 2);
+    Combine(starts : ends, 1) = MH_Combine{type, :};
+    starts = ends + 1;
+end
+
+S = [linspace(1, 12, 12) linspace(1, 12, 12) linspace(1, 12, 12)]';
+F1 = [ones(1, 12)*21 ones(1, 12)*35 ones(1, 12)*49]';
+F2_1 = [ones(1, 6) ones(1, 6)*2]';
+F2 = [F2_1; F2_1; F2_1];
+
+stats = rm_anova2(Combine, S, F1, F2, {'Time', 'Model'});
+
 % 12/03/2019
+% clear;
+% close all;
+% 
+% %calculate repeated measure anova
+% 
+% if ispc
+%     folder = 'F:\T2-1\Analysis\';
+% elseif ismac
+%     folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+% elseif isunix
+% else
+% end
+% 
+% filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
+% no = '2';
+% MW_Combine = [];
+% MH_Combine = [];
+% W_Combine = [];
+% H_Combine = [];
+% % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% type = 'Brain';
+% for i = 1:size(filename, 1)
+%     MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW');
+%     MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH');
+%     W_Combine(1:size(MW_Combine, 2), i) = MW_Combine{type, :};
+%     H_Combine(1:size(MW_Combine, 2), i) = MH_Combine{type, :};
+% end
+% 
+% [ps, tables] = anova_rm({W_Combine H_Combine}, 'on');
+% % Model = {'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD'}';
+% % 
+% % Time = [21 35 49]';
+% % 
+% % t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
+% % 'VariableNames',{'Model','P21','P35','P49'});
+% % 
+% % rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time);
+% % ranovatbl = ranova(rm);
+% % 12/03/2019
+% clear;
+% close all;
+% Y = [11, 12, 13, 11, 15, 12, 13, 14, 12]';
+% S = [1, 2, 3, 4, 5, 6, 7, 8, 9]';
+% F1 = [1, 2, 3, 1, 2, 3, 1, 2, 3]';
+% F2 = [1, 1, 1, 2, 2, 2, 3, 3, 3]';
+% FACTNAMES = {'Days', 'Type'};
+% stats = rm_anova2(Y,S,F1,F2,FACTNAMES);
+% % 12/03/2019
 % clear;
 % close all;
 % 
