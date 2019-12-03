@@ -1,37 +1,46 @@
 clear;
 close all;
-
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
-filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
-no = '2';
-MH_Part = [];
-% CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'CaudatePutamen';
-for i = 1:size(filename, 1)
-    Mean = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'Mean');
-    MH_Part(i, 1) = Mean{type, 'MH'};
-    MW_Part(1, i) = Mean{type, 'MW'};
-end
-
-x = [21, 35, 49]';
-x1 = linspace(21,49);
+Y = [11, 12, 13, 11, 15, 12, 13, 14, 12]';
+S = [1, 2, 3, 4, 5, 6, 7, 8, 9]';
+F1 = [1, 2, 3, 1, 2, 3, 1, 2, 3]';
+F2 = [1, 1, 1, 2, 2, 2, 3, 3, 3]';
+FACTNAMES = {'Days', 'Type'};
+stats = rm_anova2(Y,S,F1,F2,FACTNAMES);
+% 12/03/2019
+% clear;
+% close all;
 % 
-% xi = (0:.05:1);
-% q = @(x) x.^3;
-% yi = q(xi);
-% randomStream = RandStream.create( 'mcg16807', 'Seed', 23 );
-% ybad = yi+.3*(rand(randomStream, size(xi))-.5);
-% p = 0.1;
-
-% ys = csaps(x, MH_Part,p,x1);
-% plot(x, MH_Part, 'x', x1, ys, 'r-')
-% yMW = csaps(x, MW_Part, p, x1);
-% hold on
-% plot(x, MW_Part, 'x', x1, yMW, 'g-');
-% hold off
-
-f = fit(x,MH_Part,'poly2');
-plot(f,x,MH_Part);
+% folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+% filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
+% no = '2';
+% MH_Part = [];
+% % CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% type = 'CaudatePutamen';
+% for i = 1:size(filename, 1)
+%     Mean = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'Mean');
+%     MH_Part(i, 1) = Mean{type, 'MH'};
+%     MW_Part(1, i) = Mean{type, 'MW'};
+% end
+% 
+% x = [21, 35, 49]';
+% x1 = linspace(21,49);
+% % 
+% % xi = (0:.05:1);
+% % q = @(x) x.^3;
+% % yi = q(xi);
+% % randomStream = RandStream.create( 'mcg16807', 'Seed', 23 );
+% % ybad = yi+.3*(rand(randomStream, size(xi))-.5);
+% % p = 0.1;
+% 
+% % ys = csaps(x, MH_Part,p,x1);
+% % plot(x, MH_Part, 'x', x1, ys, 'r-')
+% % yMW = csaps(x, MW_Part, p, x1);
+% % hold on
+% % plot(x, MW_Part, 'x', x1, yMW, 'g-');
+% % hold off
+% 
+% f = fit(x,MH_Part,'poly2');
+% plot(f,x,MH_Part);
 % title('Clean Data, Noisy Data, Smoothed Values')
 % legend( 'Noisy', 'Smoothed', 'Location', 'NorthWest' )
 % 11/25/2019
