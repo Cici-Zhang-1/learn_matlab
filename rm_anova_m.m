@@ -32,7 +32,7 @@ Time = [21 35 49]';
 t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
 'VariableNames',{'Model','P21','P35','P49'});
 
-rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time);
+rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time, 'WithinModel', 'orthogonalcontrasts');
 ranovatbl = ranova(rm);
 
 disp(ranovatbl);

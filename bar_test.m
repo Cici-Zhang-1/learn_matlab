@@ -1,15 +1,25 @@
 clear;
 close all;
 
-data = [227 221 220 223 227 220 227 219 223 227 225 228];
-mean_value = [223.9167];
-e = [3.3155];
-bar(mean_value);
-set(gca,'YLim', [200,230], 'XTickLabel',{'CAG'}, 'FontSize', 15);
-ylabel('SIZE');
-title('CAG Repeat Size');
+FemaleData = [227 220 223 227 227 225];
+MaleData = [221 220 227 219 223 225];
+
+MeanFemaleData = mean(FemaleData);
+MeanMaleData = mean(MaleData);
+StdFemaleData = std(FemaleData);
+StdMaleData = std(MaleData);
+
+y = [MeanMaleData; MeanFemaleData];
+e = [StdMaleData; StdFemaleData];
+
+bar(y, 'w');
+set(gca,'YLim', [210,235], 'XTickLabel',{'Male', 'Female'}, 'FontSize', 18);
+ylabel('CAG', 'FontSize', 18);
+ax = gca; % current axes
+ax.FontSize = 16;
+% title('CAG Repeat Size');
 hold on
-errorbar([1], mean_value, e, 'k', 'linestyle', 'none', 'lineWidth', 1);
+errorbar([1, 2], y, e, 'k', 'linestyle', 'none', 'lineWidth', 1);
 hold off;
 % a_live = [0.9186, 0.9460, 0.9552, 0.9533];
 % a_tid = [0.6090, 0.6663, 0.7170, 0.7165];

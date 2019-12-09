@@ -1,39 +1,197 @@
-clear;
-close all;
-if ispc
-    folder = 'F:\T2-1\Analysis\';
-elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
-elseif isunix
-else
+CIRC = [30 58 87 115 120 142 145;
+        33 69 111 156 172 203 203;
+        30 51 75 108 115 139 140;
+        32 62 112 167 179 209 214;
+        30 49 81 125 142 174 177];
+time = [118 484 664 1004 1231 1372 1582];
+
+h = plot(time,CIRC','o','LineWidth',2);
+xlabel('Time (days)')
+ylabel('Circumference (mm)')
+title('{\bf Orange Tree Growth}')
+legend([repmat('Tree ',5,1),num2str((1:5)')],...
+       'Location','NW')
+grid on
+hold on
+model = @(PHI,t)(PHI(:,1))./(1+exp(-(t-PHI(:,2))./PHI(:,3)));
+TIME = repmat(time,5,1);
+NUMS = repmat((1:5)',size(time));
+
+beta0 = [100 100 100];
+[beta1,PSI1,stats1] = nlmefit(TIME(:),CIRC(:),NUMS(:),...
+                              [],model,beta0)
+[beta2,PSI2,stats2,b2] = nlmefit(TIME(:),CIRC(:),...
+    NUMS(:),[],model,beta0,'REParamsSelect',[1 2 3])
+PHI = repmat(beta2,1,5) + ...          % Fixed effects
+      [b2(1,:);zeros(1,5);b2(2,:)];    % Random effects
+
+tplot = 0:0.1:1600;
+for I = 1:5
+  fitted_model=@(t)(PHI(1,I))./(1+exp(-(t-PHI(2,I))./ ... 
+       PHI(3,I)));
+  plot(tplot,fitted_model(tplot),'Color',h(I).Color, ...
+	   'LineWidth',2)
 end
+% load fisheriris;
+% t = table(species,meas(:,1),meas(:,2),meas(:,3),meas(:,4),...
+% 'VariableNames',{'species','meas1','meas2','meas3','meas4'});
+% Meas = table([1 2 3 4]','VariableNames',{'Measurements'});
+% rm = fitrm(t,'meas1-meas4~species','WithinDesign',Meas);
+% manova(rm)
+% clear;
+% close all;
+% 
+% %calculate repeated measure anova
+% 
+% if ispc
+%     folder = 'F:\T2-1\Analysis\';
+% elseif ismac
+%     folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+% elseif isunix
+% else
+% end
+% 
+% filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
+% no = '2';
+% MW_Combine = [];
+% MH_Combine = [];
+% Combine = [];
+% % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% type = 'CaudatePutamen';
+% for i = 1:size(filename, 1)
+%     MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
+%     MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH_Combine');
+%     Combine(1:size(MW_Combine, 2), i) = MW_Combine{type, :};
+%     Combine(size(MW_Combine, 2) + 1: size(MW_Combine, 2) + size(MH_Combine, 2), i) = MH_Combine{type, :};
+% end
+% 
+% Model = {'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD'}';
+% 
+% Time = [21 35 49]';
+% 
+% t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
+% 'VariableNames',{'Model','P21','P35','P49'});
+% 
+% rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time, 'WithinModel', 'orthogonalcontrasts');
+% 
+% time = linspace(21, 49)';
+% [Y, ypredci] = predict(rm,t([3 11],:), ...
+%     'WithinModel','orthogonalcontrasts','WithinDesign',time, 'alpha', 0.05);
+% % p1 = plotprofile(rm,'Time','Group',{'Model'});
+% p1 = plot(time, Y(1, :), 'Color', [0 0.66 0.52], 'LineWidth', 3);
+% hold on; 
+% p2 = plot(time, Y(2, :), 'Color', [0.9 0.38 0.38], 'LineWidth', 3);
+% % p3 = plot(time,ypredci(1,:,1),'k--');
+% % p4 = plot(time,ypredci(1,:,2),'k--');
+% % p5 = plot(time, ypredci(2, :, 1), 'k-.');
+% % p6 = plot(time, ypredci(2, :, 2), 'k-.');
+% % legend([p1;p2(1);p3(1)],'Gender=F','Gender=M','Predictions','Confidence Intervals')
+% xconf = [time' time(end:-1:1)'];
+% yconf = [ypredci(1,:,1) ypredci(1, end:-1:1, 2)];
+% 
+% pC = fill(xconf,yconf,'green');
+% pC.FaceColor = [0.77 0.9 0.875];      
+% pC.EdgeColor = 'none'; 
+% pC.FaceAlpha = 0.6;
+% 
+% yconf = [ypredci(2,:,1) ypredci(2, end:-1:1, 2)];
+% 
+% pC = fill(xconf,yconf,'red');
+% pC.FaceColor = [0.97 0.85 0.85];      
+% pC.EdgeColor = 'none'; 
+% pC.FaceAlpha = 0.6;
+% 
+% xlim([20 50]);
+% xticks([21 35 49]);
+% if strcmp(type, 'CaudatePutamen')
+% %     ylim([14 22]);
+%     ylim([16 21]);
+% elseif strcmp(type, 'Neocortex')
+% %     ylim([70 110])
+%     ylim([75 100]);
+% elseif strcmp(type, 'Cerebellum')
+% %     ylim([30 70]);
+%     ylim([40 60]);
+% elseif strcmp(type, 'Thalamus')
+% %     ylim([15 28]);
+%     ylim([18 24]);
+% elseif strcmp(type, 'PeriformCortex')
+%     ylim([1 5]);
+% elseif strcmp(type, 'Hypothalamus')
+%     ylim([6 16]);
+% elseif strcmp(type, 'CC/ExternalCapsule')
+%     ylim([8 16]);
+% elseif strcmp(type, 'Brain')
+%     ylim([350 500]);
+% else
+% end
+% % ylim([15 25]);
+% xlabel('Days', 'FontSize', 18);
+% ylabel('Volumn(mm^3)', 'FontSize', 18);
+% 
+% ax = gca; % current axes
+% ax.FontSize = 16;
+% 
+% lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
+% legend('boxoff');
+% title(lgd, ['Male ' type]);
+% hold off
 
-filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
-no = '2';
-MW_Combine = [];
-MH_Combine = [];
-Combine = [];
-% Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'Brain';
-starts = 1;
-ends = 0;
-for i = 1:size(filename, 1)
-    MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW');
-    MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH');
-    ends = ends + size(MW_Combine, 2);
-    Combine(starts : ends, 1) = MW_Combine{type, :};
-    starts = ends + 1;
-    ends = ends + size(MW_Combine, 2);
-    Combine(starts : ends, 1) = MH_Combine{type, :};
-    starts = ends + 1;
-end
 
-S = [linspace(1, 12, 12) linspace(1, 12, 12) linspace(1, 12, 12)]';
-F1 = [ones(1, 12)*21 ones(1, 12)*35 ones(1, 12)*49]';
-F2_1 = [ones(1, 6) ones(1, 6)*2]';
-F2 = [F2_1; F2_1; F2_1];
+% clear;
+% close all;
+% load longitudinalData;
+% Gender = ['F' 'F' 'F' 'F' 'F' 'F' 'F' 'F' 'M' 'M' 'M' 'M' 'M' 'M' 'M' 'M']';
+% t = table(Gender,Y(:,1),Y(:,2),Y(:,3),Y(:,4),Y(:,5), ...
+%     'VariableNames',{'Gender','t0','t2','t4','t6','t8'});
+% Time = [0 2 4 6 8]';
+% rm = fitrm(t,'t0-t8 ~ Gender','WithinDesign',Time);
+% time = linspace(0,8)';
+% Y = predict(rm,t(:,:), ...
+%     'WithinModel','orthogonalcontrasts','WithinDesign',time);
+% plotprofile(rm,'Time','Group',{'Gender'})
+% hold on; 
+% plot(time,Y,'Color','k','LineStyle',':');
+% legend('Gender=F','Gender=M','Predictions')
+% hold off
 
-stats = rm_anova2(Combine, S, F1, F2, {'Time', 'Model'});
+% 12062019
+% clear;
+% close all;
+% if ispc
+%     folder = 'F:\T2-1\Analysis\';
+% elseif ismac
+%     folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+% elseif isunix
+% else
+% end
+% 
+% filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
+% no = '2';
+% MW_Combine = [];
+% MH_Combine = [];
+% Combine = [];
+% % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% type = 'Brain';
+% starts = 1;
+% ends = 0;
+% for i = 1:size(filename, 1)
+%     MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW');
+%     MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH');
+%     ends = ends + size(MW_Combine, 2);
+%     Combine(starts : ends, 1) = MW_Combine{type, :};
+%     starts = ends + 1;
+%     ends = ends + size(MW_Combine, 2);
+%     Combine(starts : ends, 1) = MH_Combine{type, :};
+%     starts = ends + 1;
+% end
+% 
+% S = [linspace(1, 12, 12) linspace(1, 12, 12) linspace(1, 12, 12)]';
+% F1 = [ones(1, 12)*21 ones(1, 12)*35 ones(1, 12)*49]';
+% F2_1 = [ones(1, 6) ones(1, 6)*2]';
+% F2 = [F2_1; F2_1; F2_1];
+% 
+% stats = rm_anova2(Combine, S, F1, F2, {'Time', 'Model'});
 
 % 12/03/2019
 % clear;

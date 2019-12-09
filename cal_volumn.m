@@ -5,8 +5,15 @@ height = 0.1;
 width = 0.0625;
 thickness = 0.0625;
 
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
-filename = 'ZQ175-7W-2';
+if ispc
+    folder = 'F:\T2-1\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
+
+filename = 'ZQ175-3W-2';
 xls = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'ROI');
 
 
@@ -14,11 +21,14 @@ C = cell(1, size(xls, 2));
 C(:) = {'double'};
 
 names = {'CaudatePutamen', 'Neocortex', ...
-    'Cerebellum', 'Thalamus', 'PeriformCortex', 'Hypothalamus', 'CC/ExternalCapsule'};
+    'Cerebellum', 'Thalamus', 'PeriformCortex', 'Hypothalamus', 'CC/ExternalCapsule', ...
+    'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'};
 names_L = {'CaudatePutamen_L', 'Neocortex_L', ...
-    'Cerebellum_L', 'Thalamus_L', 'PeriformCortex_L', 'Hypothalamus_L', 'CC/ExternalCapsule_L'};
+    'Cerebellum_L', 'Thalamus_L', 'PeriformCortex_L', 'Hypothalamus_L', 'CC/ExternalCapsule_L', ...
+    'Hippocampus_L', 'LGP_L', 'Ventricles_L', 'AccumbensNu_L', 'Amygdala_L'};
 names_R = {'CaudatePutamen_R', 'Neocortex_R', ...
-    'Cerebellum_R', 'Thalamus_R', 'PeriformCortex_R', 'Hypothalamus_R', 'CC/ExternalCapsule_R'};
+    'Cerebellum_R', 'Thalamus_R', 'PeriformCortex_R', 'Hypothalamus_R', 'CC/ExternalCapsule_R', ...
+    'Hippocampus_R', 'LGP_R', 'Ventricles_R', 'AccumbensNu_R', 'Amygdala_R'};
 
 xls{:, :} = round(xls{:, :} * height * width * thickness, 3);
 header = xls.Properties.VariableNames(:, 1:end);
