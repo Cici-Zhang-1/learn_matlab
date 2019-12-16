@@ -1,37 +1,120 @@
-CIRC = [30 58 87 115 120 142 145;
-        33 69 111 156 172 203 203;
-        30 51 75 108 115 139 140;
-        32 62 112 167 179 209 214;
-        30 49 81 125 142 174 177];
-time = [118 484 664 1004 1231 1372 1582];
+im = imread('cameraman.tif');
+imagesc(im);
+axis image off; 
+colormap gray;
+title('Please Draw ROI');
+% Draw ROI
+[binaryMask, x, y] = roipoly;
+hold on;
+plot(x, y, 'r.-', 'MarkerSize', 15);
 
-h = plot(time,CIRC','o','LineWidth',2);
-xlabel('Time (days)')
-ylabel('Circumference (mm)')
-title('{\bf Orange Tree Growth}')
-legend([repmat('Tree ',5,1),num2str((1:5)')],...
-       'Location','NW')
-grid on
-hold on
-model = @(PHI,t)(PHI(:,1))./(1+exp(-(t-PHI(:,2))./PHI(:,3)));
-TIME = repmat(time,5,1);
-NUMS = repmat((1:5)',size(time));
-
-beta0 = [100 100 100];
-[beta1,PSI1,stats1] = nlmefit(TIME(:),CIRC(:),NUMS(:),...
-                              [],model,beta0)
-[beta2,PSI2,stats2,b2] = nlmefit(TIME(:),CIRC(:),...
-    NUMS(:),[],model,beta0,'REParamsSelect',[1 2 3])
-PHI = repmat(beta2,1,5) + ...          % Fixed effects
-      [b2(1,:);zeros(1,5);b2(2,:)];    % Random effects
-
-tplot = 0:0.1:1600;
-for I = 1:5
-  fitted_model=@(t)(PHI(1,I))./(1+exp(-(t-PHI(2,I))./ ... 
-       PHI(3,I)));
-  plot(tplot,fitted_model(tplot),'Color',h(I).Color, ...
-	   'LineWidth',2)
+% Demo to have the user freehand draw an irregular shape over
+% a gray scale image, have it convert that portion to a
+% color RGB image defined by a colormap.
+clc;  % Clear command window.
+workspace;  % Make sure the workspace panel is showing.
+fontSize = 16;
+% Read in a standard MATLAB gray scale demo image.
+folder = fullfile(matlabroot, '\toolbox\images\imdemos');
+baseFileName = 'cameraman.tif';
+% Get the full filename, with path prepended.
+fullFileName = fullfile(folder, baseFileName);
+% Check if file exists.
+if ~exist(fullFileName, 'file')
+  % File doesn't exist -- didn't find it there.  Check the search path for it.
+  fullFileName = baseFileName; % No path this time.
+  if ~exist(fullFileName, 'file')
+    % Still didn't find it.  Alert user.
+    errorMessage = sprintf('Error: %s does not exist in the search path folders.', fullFileName);
+    uiwait(warndlg(errorMessage));
+    return;
+  end
 end
+grayImage = imread(fullFileName);
+imshow(grayImage, []);
+axis on;
+title('Original Grayscale Image', 'FontSize', fontSize);
+set(gcf, 'Position', get(0,'Screensize')); % Maximize figure.
+message = sprintf('Left click and hold to begin drawing.\nSimply lift the mouse button to finish');
+uiwait(msgbox(message));
+hFH = imfreehand();
+% Create a binary image ("mask") from the ROI object.
+binaryImage = hFH.createMask();
+xy = hFH.getPosition;
+% Now make it smaller so we can show more images.
+subplot(2, 2, 1);
+imshow(grayImage, []);
+axis on;
+drawnow;
+title('Original Grayscale Image', 'FontSize', fontSize);
+% Display the freehand mask.
+subplot(2, 2, 2);
+imshow(binaryImage);
+axis on;
+title('Binary mask of the region', 'FontSize', fontSize);
+% Convert the grayscale image to RGB using the jet colormap.
+rgbImage = ind2rgb(grayImage, jet(256));
+% Scale and convert from double (in the 0-1 range) to uint8.
+rgbImage = uint8(255*rgbImage);
+% Display the RGB image.
+subplot(2, 2, 3);
+imshow(rgbImage);
+axis on;
+title('RGB Image from Jet Colormap', 'FontSize', fontSize);
+% Extract the red, green, and blue channels from the color image.
+redChannel = rgbImage(:, :, 1);
+greenChannel = rgbImage(:, :, 2);
+blueChannel = rgbImage(:, :, 3);
+% Create a new color channel images for the output.
+outputImageR = grayImage;
+outputImageG = grayImage;
+outputImageB = grayImage;
+% Transfer the colored parts.
+outputImageR(binaryImage) = redChannel(binaryImage);
+outputImageG(binaryImage) = greenChannel(binaryImage);
+outputImageB(binaryImage) = blueChannel(binaryImage);
+% Convert into an RGB image
+outputRGBImage = cat(3, outputImageR, outputImageG, outputImageB);
+% Display the output RGB image.
+subplot(2, 2, 4);
+imshow(outputRGBImage);
+axis on;
+title('Output RGB Image', 'FontSize', fontSize);
+% 12/13/2019
+% CIRC = [30 58 87 115 120 142 145;
+%         33 69 111 156 172 203 203;
+%         30 51 75 108 115 139 140;
+%         32 62 112 167 179 209 214;
+%         30 49 81 125 142 174 177];
+% time = [118 484 664 1004 1231 1372 1582];
+% 
+% h = plot(time,CIRC','o','LineWidth',2);
+% xlabel('Time (days)')
+% ylabel('Circumference (mm)')
+% title('{\bf Orange Tree Growth}')
+% legend([repmat('Tree ',5,1),num2str((1:5)')],...
+%        'Location','NW')
+% grid on
+% hold on
+% model = @(PHI,t)(PHI(:,1))./(1+exp(-(t-PHI(:,2))./PHI(:,3)));
+% TIME = repmat(time,5,1);
+% NUMS = repmat((1:5)',size(time));
+% 
+% beta0 = [100 100 100];
+% [beta1,PSI1,stats1] = nlmefit(TIME(:),CIRC(:),NUMS(:),...
+%                               [],model,beta0)
+% [beta2,PSI2,stats2,b2] = nlmefit(TIME(:),CIRC(:),...
+%     NUMS(:),[],model,beta0,'REParamsSelect',[1 2 3])
+% PHI = repmat(beta2,1,5) + ...          % Fixed effects
+%       [b2(1,:);zeros(1,5);b2(2,:)];    % Random effects
+% 
+% tplot = 0:0.1:1600;
+% for I = 1:5
+%   fitted_model=@(t)(PHI(1,I))./(1+exp(-(t-PHI(2,I))./ ... 
+%        PHI(3,I)));
+%   plot(tplot,fitted_model(tplot),'Color',h(I).Color, ...
+% 	   'LineWidth',2)
+% end
 % load fisheriris;
 % t = table(species,meas(:,1),meas(:,2),meas(:,3),meas(:,4),...
 % 'VariableNames',{'species','meas1','meas2','meas3','meas4'});

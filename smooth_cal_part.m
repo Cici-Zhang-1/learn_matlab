@@ -17,7 +17,7 @@ MW_Part = [];
 MW_Up_Part = [];
 MW_Down_Part = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'Neocortex';
+type = 'CaudatePutamen';
 for i = 1:size(filename, 1)
     Mean = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'Mean');
     MH_Part(1, i) = Mean{type, 'MH'};
