@@ -17,6 +17,8 @@ MH_Combine = [];
 MH = [];
 Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
+
 type = 'CaudatePutamen';
 starts = 0;
 for i = 1:size(filename, 1)
@@ -75,7 +77,47 @@ pC.FaceAlpha = 0.6;
 p1 = plot(x1,yMW, 'Color', [0 0.66 0.52], 'LineWidth', 3);
 p2 = plot(x1,yMH, 'Color', [0.9 0.38 0.38], 'LineWidth', 3);
 
+xlim([20 50]);
+xticks([21 35 49]);
+% Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+if strcmp(type, 'CaudatePutamen')
+%     ylim([14 22]);
+    ylim([16 21]);
+elseif strcmp(type, 'Neocortex')
+%     ylim([70 110])
+    ylim([75 100]);
+elseif strcmp(type, 'Cerebellum')
+%     ylim([30 70]);
+    ylim([40 60]);
+elseif strcmp(type, 'Thalamus')
+%     ylim([15 28]);
+    ylim([18 24]);
+elseif strcmp(type, 'PeriformCortex')
+    ylim([1 5]);
+elseif strcmp(type, 'Hypothalamus')
+    ylim([6 16]);
+elseif strcmp(type, 'CC/ExternalCapsule')
+    ylim([8 16]);
+elseif strcmp(type, 'Brain')
+    ylim([350 500]);
+else
+end
+% ylim([15 25]);
+xlabel('Days', 'FontSize', 18);
+ylabel('Volumn(mm^3)', 'FontSize', 18);
 
+ax = gca; % current axes
+ax.FontSize = 16;
+
+lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
+legend('boxoff');
+title(lgd, ['Male ' type]);
+
+if strcmp(type, 'CC/ExternalCapsule')
+    saveas(gcf,sprintf('M_%s.png', 'CC_ExternalCapsule'))
+else
+    saveas(gcf,sprintf('M_%s.png', type))
+end
 % % CIRC = [16.5880	18.4210	17.1890;
 % %         17.6390	18.0130	20.1540;
 % %         17.4320	18.0220	19.6900;

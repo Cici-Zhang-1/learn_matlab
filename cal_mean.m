@@ -12,7 +12,9 @@ end
 filename = 'ZQ175-7W-2';
 header = {'MH', 'MW', 'FH', 'FW', 'MH_std', 'MW_std', 'FH_std', 'FW_std', 'MH_MW_P_Value', 'FH_FW_P_Value', 'M_F_P_Value'};
 names = {'Brain', 'CaudatePutamen', 'Neocortex', ...
-    'Cerebellum', 'Thalamus', 'PeriformCortex', 'Hypothalamus', 'CC/ExternalCapsule'};
+    'Cerebellum', 'Thalamus', 'PeriformCortex', ...
+    'Hypothalamus', 'CC/ExternalCapsule', ...
+    'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'};
 C = cell(1, size(header, 2));
 C(:) = {'double'};
 mean_value = table('Size', [size(names, 2) size(header, 2)], 'VariableTypes', C,...
@@ -134,6 +136,86 @@ mean_value.FW_std(8) = round(std(FW_Combine{'CC/ExternalCapsule', :}), 3);
 [h,mean_value.FH_FW_P_Value(8),ci,stats] = ttest2(FH_Combine{'CC/ExternalCapsule', :}',FW_Combine{'CC/ExternalCapsule', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(8),ci,stats] = ttest2((MH_Combine{'CC/ExternalCapsule', :} + FH_Combine{'CC/ExternalCapsule', :})',...
     (MW_Combine{'CC/ExternalCapsule', :} + FW_Combine{'CC/ExternalCapsule', :})', 'Vartype', 'unequal');
+
+mean_value.MH(9) = round(mean(MH_Combine{'Hippocampus', :}, 2), 3);
+mean_value.MH_std(9) = round(std(MH_Combine{'Hippocampus', :}), 3);
+mean_value.MW(9) = round(mean(MW_Combine{'Hippocampus', :}, 2), 3);
+mean_value.MW_std(9) = round(std(MW_Combine{'Hippocampus', :}), 3);
+mean_value.FH(9) = round(mean(FH_Combine{'Hippocampus', :}, 2), 3);
+mean_value.FH_std(9) = round(std(FH_Combine{'Hippocampus', :}), 3);
+mean_value.FW(9) = round(mean(FW_Combine{'Hippocampus', :}, 2), 3);
+mean_value.FW_std(9) = round(std(FW_Combine{'Hippocampus', :}), 3);
+[h,mean_value.MH_MW_P_Value(9),ci,stats] = ttest2(MH_Combine{'Hippocampus', :}',...
+    MW_Combine{'Hippocampus', :}', 'Vartype', 'unequal');
+[h,mean_value.FH_FW_P_Value(9),ci,stats] = ttest2(FH_Combine{'Hippocampus', :}',...
+    FW_Combine{'Hippocampus', :}', 'Vartype', 'unequal');
+[h,mean_value.M_F_P_Value(9),ci,stats] = ttest2((MH_Combine{'Hippocampus', :} + ...
+    FH_Combine{'Hippocampus', :})',...
+    (MW_Combine{'Hippocampus', :} + FW_Combine{'Hippocampus', :})', 'Vartype', 'unequal');
+
+mean_value.MH(10) = round(mean(MH_Combine{'LGP', :}, 2), 3);
+mean_value.MH_std(10) = round(std(MH_Combine{'LGP', :}), 3);
+mean_value.MW(10) = round(mean(MW_Combine{'LGP', :}, 2), 3);
+mean_value.MW_std(10) = round(std(MW_Combine{'LGP', :}), 3);
+mean_value.FH(10) = round(mean(FH_Combine{'LGP', :}, 2), 3);
+mean_value.FH_std(10) = round(std(FH_Combine{'LGP', :}), 3);
+mean_value.FW(10) = round(mean(FW_Combine{'LGP', :}, 2), 3);
+mean_value.FW_std(10) = round(std(FW_Combine{'LGP', :}), 3);
+[h,mean_value.MH_MW_P_Value(10),ci,stats] = ttest2(MH_Combine{'LGP', :}',...
+    MW_Combine{'LGP', :}', 'Vartype', 'unequal');
+[h,mean_value.FH_FW_P_Value(10),ci,stats] = ttest2(FH_Combine{'LGP', :}',...
+    FW_Combine{'LGP', :}', 'Vartype', 'unequal');
+[h,mean_value.M_F_P_Value(10),ci,stats] = ttest2((MH_Combine{'LGP', :} + ...
+    FH_Combine{'LGP', :})',...
+    (MW_Combine{'LGP', :} + FW_Combine{'LGP', :})', 'Vartype', 'unequal');
+
+mean_value.MH(11) = round(mean(MH_Combine{'Ventricles', :}, 2), 3);
+mean_value.MH_std(11) = round(std(MH_Combine{'Ventricles', :}), 3);
+mean_value.MW(11) = round(mean(MW_Combine{'Ventricles', :}, 2), 3);
+mean_value.MW_std(11) = round(std(MW_Combine{'Ventricles', :}), 3);
+mean_value.FH(11) = round(mean(FH_Combine{'Ventricles', :}, 2), 3);
+mean_value.FH_std(11) = round(std(FH_Combine{'Ventricles', :}), 3);
+mean_value.FW(11) = round(mean(FW_Combine{'Ventricles', :}, 2), 3);
+mean_value.FW_std(11) = round(std(FW_Combine{'Ventricles', :}), 3);
+[h,mean_value.MH_MW_P_Value(11),ci,stats] = ttest2(MH_Combine{'Ventricles', :}',...
+    MW_Combine{'Ventricles', :}', 'Vartype', 'unequal');
+[h,mean_value.FH_FW_P_Value(11),ci,stats] = ttest2(FH_Combine{'Ventricles', :}',...
+    FW_Combine{'Ventricles', :}', 'Vartype', 'unequal');
+[h,mean_value.M_F_P_Value(11),ci,stats] = ttest2((MH_Combine{'Ventricles', :} + ...
+    FH_Combine{'Ventricles', :})',...
+    (MW_Combine{'Ventricles', :} + FW_Combine{'Ventricles', :})', 'Vartype', 'unequal');
+
+mean_value.MH(12) = round(mean(MH_Combine{'AccumbensNu', :}, 2), 3);
+mean_value.MH_std(12) = round(std(MH_Combine{'AccumbensNu', :}), 3);
+mean_value.MW(12) = round(mean(MW_Combine{'AccumbensNu', :}, 2), 3);
+mean_value.MW_std(12) = round(std(MW_Combine{'AccumbensNu', :}), 3);
+mean_value.FH(12) = round(mean(FH_Combine{'AccumbensNu', :}, 2), 3);
+mean_value.FH_std(12) = round(std(FH_Combine{'AccumbensNu', :}), 3);
+mean_value.FW(12) = round(mean(FW_Combine{'AccumbensNu', :}, 2), 3);
+mean_value.FW_std(12) = round(std(FW_Combine{'AccumbensNu', :}), 3);
+[h,mean_value.MH_MW_P_Value(12),ci,stats] = ttest2(MH_Combine{'AccumbensNu', :}',...
+    MW_Combine{'AccumbensNu', :}', 'Vartype', 'unequal');
+[h,mean_value.FH_FW_P_Value(12),ci,stats] = ttest2(FH_Combine{'AccumbensNu', :}',...
+    FW_Combine{'AccumbensNu', :}', 'Vartype', 'unequal');
+[h,mean_value.M_F_P_Value(12),ci,stats] = ttest2((MH_Combine{'AccumbensNu', :} + ...
+    FH_Combine{'AccumbensNu', :})',...
+    (MW_Combine{'AccumbensNu', :} + FW_Combine{'AccumbensNu', :})', 'Vartype', 'unequal');
+
+mean_value.MH(13) = round(mean(MH_Combine{'Amygdala', :}, 2), 3);
+mean_value.MH_std(13) = round(std(MH_Combine{'Amygdala', :}), 3);
+mean_value.MW(13) = round(mean(MW_Combine{'Amygdala', :}, 2), 3);
+mean_value.MW_std(13) = round(std(MW_Combine{'Amygdala', :}), 3);
+mean_value.FH(13) = round(mean(FH_Combine{'Amygdala', :}, 2), 3);
+mean_value.FH_std(13) = round(std(FH_Combine{'Amygdala', :}), 3);
+mean_value.FW(13) = round(mean(FW_Combine{'Amygdala', :}, 2), 3);
+mean_value.FW_std(13) = round(std(FW_Combine{'AccumbensNu', :}), 3);
+[h,mean_value.MH_MW_P_Value(13),ci,stats] = ttest2(MH_Combine{'Amygdala', :}',...
+    MW_Combine{'Amygdala', :}', 'Vartype', 'unequal');
+[h,mean_value.FH_FW_P_Value(13),ci,stats] = ttest2(FH_Combine{'Amygdala', :}',...
+    FW_Combine{'Amygdala', :}', 'Vartype', 'unequal');
+[h,mean_value.M_F_P_Value(13),ci,stats] = ttest2((MH_Combine{'Amygdala', :} + ...
+    FH_Combine{'Amygdala', :})',...
+    (MW_Combine{'Amygdala', :} + FW_Combine{'Amygdala', :})', 'Vartype', 'unequal');
 
 mean_value.MH_MW_P_Value = round(mean_value.MH_MW_P_Value, 3);
 mean_value.FH_FW_P_Value = round(mean_value.FH_FW_P_Value, 3);

@@ -17,10 +17,13 @@ MW_Combine = [];
 MH_Combine = [];
 Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'CaudatePutamen';
+% 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
+type = 'Ventricles';
 for i = 1:size(filename, 1)
-    MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
-    MH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH_Combine');
+    MW_Combine = readtable([folder filename(i, :) no '.xlsx'], ...
+        'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
+    MH_Combine = readtable([folder filename(i, :) no '.xlsx'], ...
+        'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MH_Combine');
     Combine(1:size(MW_Combine, 2), i) = MW_Combine{type, :};
     Combine(size(MW_Combine, 2) + 1: size(MW_Combine, 2) + size(MH_Combine, 2), i) = MH_Combine{type, :};
 end
