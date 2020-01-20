@@ -1,6 +1,12 @@
 clear
 close all;
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+if ispc
+    folder = 'F:\T2-1\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
 filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
 no = '2';
 MH_Brain = [];

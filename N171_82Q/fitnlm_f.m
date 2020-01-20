@@ -1,0 +1,133 @@
+clear;
+close all;
+
+%Fit nonlinear regression model
+
+if ispc
+    folder = 'F:\N171-82Q\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
+
+filename = ['N171-82Q-3W';'N171-82Q-5W';'N171-82Q-7W'];
+no = '';
+FW_Combine = [];
+FW = [];
+FH_Combine = [];
+FH = [];
+Combine = [];
+% Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
+
+type = 'CaudatePutamen';
+starts = 0;
+for i = 1:size(filename, 1)
+    FW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
+    FH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FH_Combine');
+    ends = starts + size(FW_Combine, 2);
+    starts = starts + 1;
+    FW(starts:ends, 1) = FW_Combine{type, :};
+    FH(starts:ends, 1) = FH_Combine{type, :};
+    starts = ends;
+end
+
+x = [repmat(21, 6, 1); repmat(35, 6, 1); repmat(49, 6, 1)];
+
+model = @(b, t) b(:, 1).*t.^2 + b(:, 2).*t + b(:, 3);
+
+opts = statset('nlinfit');
+opts.RobustWgtFun = 'bisquare';
+
+beta0 = [1 1 20];
+x1 = linspace(21,49)';
+mdl = fitnlm(x,FW,model,beta0, 'Options', opts);
+[yFW,yci] = predict(mdl,x1);
+yup = yci(:, 2);
+ydown = yci(:, 1);
+
+xconf = [x1' x1(end:-1:1)'];         
+yconf = [ydown' yup(end:-1:1)'];
+
+pC = fill(xconf,yconf,'green');
+pC.FaceColor = [0.79 0.87 0.89];      
+pC.EdgeColor = 'none'; 
+pC.FaceAlpha = 0.6;
+
+hold on;
+
+mdl = fitnlm(x,FH,model,beta0);
+[yFH,yci] = predict(mdl,x1);
+yup = yci(:, 2);
+ydown = yci(:, 1);
+
+xconf = [x1' x1(end:-1:1)'];         
+yconf = [ydown' yup(end:-1:1)'];
+
+pC = fill(xconf,yconf,'red');
+pC.FaceColor = [0.926 0.79 0.86];      
+pC.EdgeColor = 'none'; 
+pC.FaceAlpha = 0.6;
+
+p1 = plot(x1,yFW, 'Color', [0.13 0.46 0.54], 'LineWidth', 3);
+p2 = plot(x1,yFH, 'Color', [0.69 0.164 0.531], 'LineWidth', 3);
+
+
+xlim([20 50]);
+xticks([21 35 49]);
+% Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
+% 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
+if strcmp(type, 'CaudatePutamen')
+%     ylim([14 22]);
+    ylim([16 24]);
+elseif strcmp(type, 'Neocortex')
+%     ylim([70 110])
+    ylim([85 110]);
+elseif strcmp(type, 'Cerebellum')
+%     ylim([30 70]);
+    ylim([45 80]);
+elseif strcmp(type, 'Thalamus')
+%     ylim([15 28]);
+    ylim([18 25]);
+elseif strcmp(type, 'PeriformCortex')
+    ylim([1 5]);
+elseif strcmp(type, 'Hypothalamus')
+    ylim([6 16]);
+elseif strcmp(type, 'CC/ExternalCapsule')
+    ylim([8 16]);
+elseif strcmp(type, 'Brain')
+    ylim([350 520]);
+elseif strcmp(type, 'Hippocampus')
+    ylim([19 25]);
+elseif strcmp(type, 'LGP')
+    ylim([1.3 2.3]);
+elseif strcmp(type, 'Ventricles')
+    ylim([7 13]);
+elseif strcmp(type, 'AccumbensNu')
+    ylim([1.4 2.3]);
+elseif strcmp(type, 'Amygdala')
+    ylim([3.5 6.5]);
+else
+end
+% ylim([15 25]);
+xlabel('Days', 'FontSize', 18);
+ylabel('Volumn(mm^3)', 'FontSize', 18);
+
+ax = gca; % current axes
+ax.FontSize = 16;
+
+lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
+legend('boxoff');
+
+if strcmp(type, 'LGP')
+    title(lgd, 'Female Lateral Globus Pallidus');
+else
+    title(lgd, ['Female ' type]);
+end
+
+if strcmp(type, 'CC/ExternalCapsule')
+    saveas(gcf,sprintf('%sF_%s.png', folder, 'CC_ExternalCapsule'))
+else
+    saveas(gcf,sprintf('%sF_%s.png', folder, type))
+end

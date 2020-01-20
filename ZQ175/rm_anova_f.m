@@ -12,6 +12,7 @@ else
 end
 
 filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
+filename_results = 'Structure_MRI_ZQ175_Two_factors_repeated_measures_anova_results_female';
 no = '2';
 FW_Combine = [];
 FH_Combine = [];
@@ -35,6 +36,8 @@ t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
 
 rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time);
 ranovatbl = ranova(rm);
+
+writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', type);
 
 disp(ranovatbl);
 
