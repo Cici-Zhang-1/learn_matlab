@@ -38,9 +38,17 @@ t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
 
 rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time);
 ranovatbl = ranova(rm);
-
-writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', type);
+% anovatbl = anova(rm);
+anovatbl = anova(rm,'WithinModel','orthogonalcontrasts');
+% 
+% 
+% if strcmp(type, 'CC/ExternalCapsule')
+%     writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'CC_ExternalCapsule');
+% else
+%     writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', type);
+% end
 
 disp(ranovatbl);
+disp(anovatbl);
 
 

@@ -1,8 +1,14 @@
 clear
 close all;
-folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
-filename = ['ZQ175-3W-';'ZQ175-5W-';'ZQ175-7W-'];
-no = '2';
+if ispc
+    folder = 'F:\N171-82Q\Analysis\';
+elseif ismac
+    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+elseif isunix
+else
+end
+filename = ['N171-82Q-3W';'N171-82Q-5W';'N171-82Q-7W'];
+no = '';
 MH_Part = [];
 MH_Up_Part = [];
 MH_Down_Part = [];

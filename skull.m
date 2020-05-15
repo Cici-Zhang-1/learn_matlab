@@ -4,7 +4,7 @@ close all;
 % addpath('./vis3d');
 addpath('.\NIfTI');
 addpath('.\func');
-floder = 'F:\T2-2\ZQ175-5W\141\';
+floder = 'F:\T2-1\ZQ175-5W\141\';
 % v = niftiread('172w3.hdr', '172w3.img');
 % 
 % imshow(v(:, :, 128));

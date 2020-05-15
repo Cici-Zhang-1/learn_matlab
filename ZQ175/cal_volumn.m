@@ -111,27 +111,37 @@ mh.Properties.RowNames = volumns.Properties.RowNames;
 %MH
 writetable(mh, [folder filename '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'MH');
 
-fw_combine_tmp = fw(2:end, :);
+xls_combine_row_names = ['Brain'; xls_combine_row_names];
+fw_combine_tmp = fw;
 C = cell(1, size(fw_combine_tmp, 2));
 C(:) = {'double'};
-fw_combine = table('Size', [size(fw_combine_tmp, 1) / 2 size(fw_combine_tmp, 2)], 'VariableTypes', ...
+fw_combine = table('Size', [ceil(size(fw_combine_tmp, 1) / 2) size(fw_combine_tmp, 2)], 'VariableTypes', ...
     C,  'VariableNames', fw.Properties.VariableNames, 'RowNames', xls_combine_row_names);
-fw_combine_header = [];
-for i = 1:2:size(fw_combine_tmp, 1)-1
+fw_combine{1, :} = table2array(fw_combine_tmp(1, :));
+for i = 2:2:size(fw_combine_tmp, 1)-1
     tmp = fw_combine_tmp(i:i+1, :);
     fw_combine{fix(i/2) + 1, :} = sum(table2array(tmp));
 end
 fw_combine.Properties.RowNames = xls_combine_row_names;
+% fw_combine_tmp = fw(2:end, :);
+% C = cell(1, size(fw_combine_tmp, 2));
+% C(:) = {'double'};
+% fw_combine = table('Size', [size(fw_combine_tmp, 1) / 2 size(fw_combine_tmp, 2)], 'VariableTypes', ...
+%     C,  'VariableNames', fw.Properties.VariableNames, 'RowNames', xls_combine_row_names);
+% fw_combine_header = [];
+% for i = 1:2:size(fw_combine_tmp, 1)-1
+%     tmp = fw_combine_tmp(i:i+1, :);
+%     fw_combine{fix(i/2) + 1, :} = sum(table2array(tmp));
+% end
+% fw_combine.Properties.RowNames = xls_combine_row_names;
 %FW_Combine
 writetable(fw_combine, [folder filename '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'FW_Combine');
 
-fh_combine_tmp = fh(2:end, :);
-C = cell(1, size(fh_combine_tmp, 2));
-C(:) = {'double'};
-fh_combine = table('Size', [size(fh_combine_tmp, 1) / 2 size(fh_combine_tmp, 2)], 'VariableTypes', ...
+fh_combine_tmp = fh;
+fh_combine = table('Size', [ceil(size(fh_combine_tmp, 1) / 2) size(fh_combine_tmp, 2)], 'VariableTypes', ...
     C,  'VariableNames', fh.Properties.VariableNames);
-fh_combine_header = [];
-for i = 1:2:size(fh_combine_tmp, 1)-1
+fh_combine{1, :} = table2array(fh_combine_tmp(1, :));
+for i = 2:2:size(fh_combine_tmp, 1)-1
     tmp = fh_combine_tmp(i:i+1, :);
     fh_combine{fix(i/2) + 1, :} = sum(table2array(tmp));
 end
@@ -139,13 +149,11 @@ fh_combine.Properties.RowNames = xls_combine_row_names;
 %FH_Combine
 writetable(fh_combine, [folder filename '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'FH_Combine');
 
-mw_combine_tmp = mw(2:end, :);
-C = cell(1, size(mw_combine_tmp, 2));
-C(:) = {'double'};
-mw_combine = table('Size', [size(mw_combine_tmp, 1) / 2 size(mw_combine_tmp, 2)], 'VariableTypes', ...
+mw_combine_tmp = mw;
+mw_combine = table('Size', [ceil(size(mw_combine_tmp, 1) / 2) size(mw_combine_tmp, 2)], 'VariableTypes', ...
     C,  'VariableNames', mw.Properties.VariableNames);
-mw_combine_header = [];
-for i = 1:2:size(mw_combine_tmp, 1)-1
+mw_combine{1, :} = table2array(mw_combine_tmp(1, :));
+for i = 2:2:size(mw_combine_tmp, 1)-1
     tmp = mw_combine_tmp(i:i+1, :);
     mw_combine{fix(i/2) + 1, :} = sum(table2array(tmp));
 end
@@ -153,13 +161,11 @@ mw_combine.Properties.RowNames = xls_combine_row_names;
 %MW_Combine
 writetable(mw_combine, [folder filename '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'MW_Combine');
 
-mh_combine_tmp = mh(2:end, :);
-C = cell(1, size(mh_combine_tmp, 2));
-C(:) = {'double'};
-mh_combine = table('Size', [size(mh_combine_tmp, 1) / 2 size(mh_combine_tmp, 2)], 'VariableTypes', ...
+mh_combine_tmp = mh;
+mh_combine = table('Size', [ceil(size(mh_combine_tmp, 1) / 2) size(mh_combine_tmp, 2)], 'VariableTypes', ...
     C,  'VariableNames', mh.Properties.VariableNames);
-mh_combine_header = [];
-for i = 1:2:size(mh_combine_tmp, 1)-1
+mh_combine{1, :} = table2array(mh_combine_tmp(1, :));
+for i = 2:2:size(mh_combine_tmp, 1)-1
     tmp = mh_combine_tmp(i:i+1, :);
     mh_combine{fix(i/2) + 1, :} = sum(table2array(tmp));
 end
@@ -167,6 +173,7 @@ mh_combine.Properties.RowNames = xls_combine_row_names;
 %MH_Combine
 writetable(mh_combine, [folder filename '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'MH_Combine');
 
+fclose all;
 % pixel = table2array(xls(1:end, 6:end));
 % header = xls.Properties.VariableNames(1, 6:end);
 % header2 = {};

@@ -1,26 +1,47 @@
 clear;
 close all;
 
-FemaleData = [227 220 223 227 227 225];
-MaleData = [221 220 227 219 223 225];
+hdData = [1.000 0.630 0.470];
+wtData = [0.730 0.600 0.930];
 
-MeanFemaleData = mean(FemaleData);
-MeanMaleData = mean(MaleData);
-StdFemaleData = std(FemaleData);
-StdMaleData = std(MaleData);
+hdMeanData = mean(hdData);
+wtMeanData = mean(wtData);
+hdStdData = std(hdData);
+wtStdData = std(wtData);
 
-y = [MeanMaleData; MeanFemaleData];
-e = [StdMaleData; StdFemaleData];
+y = [hdMeanData; wtMeanData];
+e = [hdStdData; wtStdData];
 
 bar(y, 'w');
-set(gca,'YLim', [210,235], 'XTickLabel',{'Male', 'Female'}, 'FontSize', 18);
-ylabel('CAG', 'FontSize', 18);
+set(gca,'YLim', [0,2], 'XTickLabel',{'HD', 'WT'}, 'FontSize', 18);
+ylabel('Darpp32/Beta-actin', 'FontSize', 18);
 ax = gca; % current axes
 ax.FontSize = 16;
 % title('CAG Repeat Size');
 hold on
 errorbar([1, 2], y, e, 'k', 'linestyle', 'none', 'lineWidth', 1);
 hold off;
+
+% FemaleData = [227 220 223 227 227 225];
+% MaleData = [221 220 227 219 223 225];
+% 
+% MeanFemaleData = mean(FemaleData);
+% MeanMaleData = mean(MaleData);
+% StdFemaleData = std(FemaleData);
+% StdMaleData = std(MaleData);
+% 
+% y = [MeanMaleData; MeanFemaleData];
+% e = [StdMaleData; StdFemaleData];
+% 
+% bar(y, 'w');
+% set(gca,'YLim', [210,235], 'XTickLabel',{'Male', 'Female'}, 'FontSize', 18);
+% ylabel('CAG', 'FontSize', 18);
+% ax = gca; % current axes
+% ax.FontSize = 16;
+% % title('CAG Repeat Size');
+% hold on
+% errorbar([1, 2], y, e, 'k', 'linestyle', 'none', 'lineWidth', 1);
+% hold off;
 % a_live = [0.9186, 0.9460, 0.9552, 0.9533];
 % a_tid = [0.6090, 0.6663, 0.7170, 0.7165];
 % a = [a_live; a_tid];

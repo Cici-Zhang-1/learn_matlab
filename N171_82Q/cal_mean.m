@@ -9,7 +9,7 @@ elseif isunix
 else
 end
 
-filename = 'N171-82Q-7W';
+filename = 'N171-82Q-5W';
 header = {'MH', 'MW', 'FH', 'FW', 'MH_std', 'MW_std', 'FH_std', 'FW_std', 'MH_MW_P_Value', 'FH_FW_P_Value', 'M_F_P_Value'};
 names = {'Brain', 'CaudatePutamen', 'Neocortex', ...
     'Cerebellum', 'Thalamus', 'PeriformCortex', ...

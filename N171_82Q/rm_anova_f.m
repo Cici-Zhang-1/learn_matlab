@@ -19,7 +19,7 @@ FH_Combine = [];
 Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
-type = 'Brain';
+type = 'Amygdala';
 for i = 1:size(filename, 1)
     FW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
     FH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FH_Combine');
@@ -37,7 +37,11 @@ t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
 rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time);
 ranovatbl = ranova(rm);
 
-writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', type);
+if strcmp(type, 'CC/ExternalCapsule')
+    writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', 'CC_ExternalCapsule');
+else
+    writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', type);
+end
 
 disp(ranovatbl);
 
