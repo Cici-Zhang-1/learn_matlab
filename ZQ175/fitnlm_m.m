@@ -6,7 +6,8 @@ close all;
 if ispc
     folder = 'F:\T2-1\Analysis\';
 elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    % folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    folder = '/Users/chuangchuangzhang/Documents/Data/StructureMRI/ZQ175/';
 elseif isunix
 else
 end
@@ -21,7 +22,7 @@ Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
 
-type = 'Brain';
+type = 'CaudatePutamen';
 starts = 0;
 for i = 1:size(filename, 1)
     MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
@@ -38,12 +39,13 @@ x = [repmat(21, 6, 1); repmat(35, 6, 1); repmat(49, 6, 1)];
 model = @(b, t) b(:, 1).*t.^2 + b(:, 2).*t + b(:, 3);
 
 opts = statset('nlinfit');
-opts.RobustWgtFun = 'bisquare';
+opts.RobustWgtFun = [];
 
 beta0 = [1 1 20];
 x1 = linspace(21,49)';
-mdl = fitnlm(x,MW,model,beta0, 'Options', opts);
-[yMW,yci] = predict(mdl,x1);
+mdlW = fitnlm(x,MW,model,beta0, 'ErrorModel', 'combined', 'Options', opts);
+%disp(mdlW)
+[yMW,yci] = predict(mdlW,x1);
 yup = yci(:, 2);
 ydown = yci(:, 1);
 
@@ -57,7 +59,8 @@ pC.FaceAlpha = 0.6;
 
 hold on;
 
-mdl = fitnlm(x,MH,model,beta0);
+mdl = fitnlm(x,MH,model,beta0, 'ErrorModel', 'combined','Options', opts);
+%disp(mdl)
 [yMH,yci] = predict(mdl,x1);
 yup = yci(:, 2);
 ydown = yci(:, 1);

@@ -6,7 +6,7 @@ close all;
 if ispc
     folder = 'F:\T2-1\Analysis\';
 elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    folder = '/Users/chuangchuangzhang/Documents/Data/StructureMRI/ZQ175/';
 elseif isunix
 else
 end
@@ -19,7 +19,7 @@ FH_Combine = [];
 Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
-type = 'Amygdala';
+type = 'AccumbensNu';
 for i = 1:size(filename, 1)
     FW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
     FH_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FH_Combine');

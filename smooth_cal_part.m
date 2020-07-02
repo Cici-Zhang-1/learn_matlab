@@ -3,7 +3,7 @@ close all;
 if ispc
     folder = 'F:\T2-1\Analysis\';
 elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    folder = '/Users/chuangchuangzhang/Documents/Data/StructureMRI/ZQ175/';
 elseif isunix
 else
 end

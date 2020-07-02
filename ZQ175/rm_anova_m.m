@@ -6,7 +6,8 @@ close all;
 if ispc
     folder = 'F:\T2-1\Analysis\';
 elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    %folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    folder = '/Users/chuangchuangzhang/Documents/Data/StructureMRI/ZQ175/';
 elseif isunix
 else
 end
@@ -19,7 +20,7 @@ MH_Combine = [];
 Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
-type = 'Neocortex';
+type = 'CaudatePutamen';
 for i = 1:size(filename, 1)
     MW_Combine = readtable([folder filename(i, :) no '.xlsx'], ...
         'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
@@ -31,13 +32,14 @@ end
 
 Model = {'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MWT' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD' 'MHD'}';
 
-Time = [21 35 49]';
+Days = table([21 35 49]','VariableNames',{'Days'});
 
 t = table(Model, Combine(:,1), Combine(:,2), Combine(:,3), ...
 'VariableNames',{'Model','P21','P35','P49'});
 
-rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Time);
-ranovatbl = ranova(rm);
+
+rm = fitrm(t,'P21-P49 ~ Model','WithinDesign',Days);
+[ranovatbl,A,C,D] = ranova(rm);
 
 writetable(ranovatbl, [folder filename_results '.xlsx'], 'WriteVariableNames', true, 'WriteRowNames', true, 'Sheet', type);
 

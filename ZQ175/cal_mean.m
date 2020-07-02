@@ -4,19 +4,21 @@ close all;
 if ispc
     folder = 'F:\T2-1\Analysis\';
 elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    folder = '/Users/chuangchuangzhang/Documents/Data/StructureMRI/ZQ175/';
 elseif isunix
 else
 end
 
-filename = 'ZQ175-7W-2';
-header = {'MH', 'MW', 'FH', 'FW', 'MH_std', 'MW_std', 'FH_std', 'FW_std', 'MH_MW_P_Value', 'FH_FW_P_Value', 'M_F_P_Value'};
+filename = 'ZQ175-5W-2';
+header = {'MH', 'MW', 'FH', 'FW', 'MH_std', 'MW_std', 'FH_std', 'FW_std', 'MH_MW_P_Value', ...
+    'FH_FW_P_Value', 'M_F_P_Value', 'MH_CI', 'MW_CI', 'FH_CI', 'FW_CI'};
 names = {'Brain', 'CaudatePutamen', 'Neocortex', ...
     'Cerebellum', 'Thalamus', 'PeriformCortex', ...
     'Hypothalamus', 'CC/ExternalCapsule', ...
     'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'};
 C = cell(1, size(header, 2));
 C(:) = {'double'};
+C(12:end) = {'string'};
 mean_value = table('Size', [size(names, 2) size(header, 2)], 'VariableTypes', C,...
     'VariableNames', header, 'RowNames', names);
 MH_Brain = [];
@@ -31,12 +33,32 @@ FH = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNam
 FW = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW');
 mean_value.MH(1) = round(mean(MH{'Brain', :}, 2), 3);
 mean_value.MH_std(1) = round(std(MH{'Brain', :}), 3);
+SEM = std(MH{'Brain', :})/sqrt(size(MH{'Brain', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH{'Brain', :}, 2)-1);      % T-Score
+CI = round(mean(MH{'Brain', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(1) = join(['(', join(string(CI), ", "), ')'], '');
+
 mean_value.MW(1) = round(mean(MW{'Brain', :}, 2), 3);
 mean_value.MW_std(1) = round(std(MW{'Brain', :}), 3);
+SEM = std(MW{'Brain', :})/sqrt(size(MW{'Brain', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW{'Brain', :}, 2)-1);      % T-Score
+CI = round(mean(MW{'Brain', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(1) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(1) = round(mean(FH{'Brain', :}, 2), 3);
 mean_value.FH_std(1) = round(std(FH{'Brain', :}), 3);
+SEM = std(FH{'Brain', :})/sqrt(size(FH{'Brain', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH{'Brain', :}, 2)-1);      % T-Score
+CI = round(mean(FH{'Brain', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(1) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(1) = round(mean(FW{'Brain', :}, 2), 3);
 mean_value.FW_std(1) = round(std(FW{'Brain', :}), 3);
+SEM = std(FW{'Brain', :})/sqrt(size(FW{'Brain', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW{'Brain', :}, 2)-1);      % T-Score
+CI = round(mean(FW{'Brain', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(1) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(1),ci,stats] = ttest2(MH{'Brain', :}',MW{'Brain', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(1),ci,stats] = ttest2(FH{'Brain', :}',FW{'Brain', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(1),ci,stats] = ttest2((MH{'Brain', :} + FH{'Brain', :})',(MW{'Brain', :} + FW{'Brain', :})', 'Vartype', 'unequal');
@@ -48,12 +70,32 @@ FH_Combine = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'Re
 FW_Combine = readtable([folder filename '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
 mean_value.MH(2) = round(mean(MH_Combine{'CaudatePutamen', :}, 2), 3);
 mean_value.MH_std(2) = round(std(MH_Combine{'CaudatePutamen', :}), 3);
+SEM = std(MH_Combine{'CaudatePutamen', :})/sqrt(size(MH_Combine{'CaudatePutamen', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH_Combine{'CaudatePutamen', :}, 2)-1);      % T-Score
+CI = round(mean(MH_Combine{'CaudatePutamen', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(2) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.MW(2) = round(mean(MW_Combine{'CaudatePutamen', :}, 2), 3);
 mean_value.MW_std(2) = round(std(MW_Combine{'CaudatePutamen', :}), 3);
+SEM = std(MW_Combine{'CaudatePutamen', :})/sqrt(size(MW_Combine{'CaudatePutamen', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW_Combine{'CaudatePutamen', :}, 2)-1);      % T-Score
+CI = round(mean(MW_Combine{'CaudatePutamen', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(2) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(2) = round(mean(FH_Combine{'CaudatePutamen', :}, 2), 3);
 mean_value.FH_std(2) = round(std(FH_Combine{'CaudatePutamen', :}), 3);
+SEM = std(FH_Combine{'CaudatePutamen', :})/sqrt(size(FH_Combine{'CaudatePutamen', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH_Combine{'CaudatePutamen', :}, 2)-1);      % T-Score
+CI = round(mean(FH_Combine{'CaudatePutamen', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(2) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(2) = round(mean(FW_Combine{'CaudatePutamen', :}, 2), 3);
 mean_value.FW_std(2) = round(std(FW_Combine{'CaudatePutamen', :}), 3);
+SEM = std(FW_Combine{'CaudatePutamen', :})/sqrt(size(FW_Combine{'CaudatePutamen', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW_Combine{'CaudatePutamen', :}, 2)-1);      % T-Score
+CI = round(mean(FW_Combine{'CaudatePutamen', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(2) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(2),ci,stats] = ttest2(MH_Combine{'CaudatePutamen', :}',MW_Combine{'CaudatePutamen', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(2),ci,stats] = ttest2(FH_Combine{'CaudatePutamen', :}',FW_Combine{'CaudatePutamen', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(2),ci,stats] = ttest2((MH_Combine{'CaudatePutamen', :} + FH_Combine{'CaudatePutamen', :})',...
@@ -61,12 +103,32 @@ mean_value.FW_std(2) = round(std(FW_Combine{'CaudatePutamen', :}), 3);
 
 mean_value.MH(3) = round(mean(MH_Combine{'Neocortex', :}, 2), 3);
 mean_value.MH_std(3) = round(std(MH_Combine{'Neocortex', :}), 3);
+SEM = std(MH_Combine{'Neocortex', :})/sqrt(size(MH_Combine{'Neocortex', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH_Combine{'Neocortex', :}, 2)-1);      % T-Score
+CI = round(mean(MH_Combine{'Neocortex', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(3) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.MW(3) = round(mean(MW_Combine{'Neocortex', :}, 2), 3);
 mean_value.MW_std(3) = round(std(MW_Combine{'Neocortex', :}), 3);
+SEM = std(MW_Combine{'Neocortex', :})/sqrt(size(MW_Combine{'Neocortex', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW_Combine{'Neocortex', :}, 2)-1);      % T-Score
+CI = round(mean(MW_Combine{'Neocortex', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(3) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(3) = round(mean(FH_Combine{'Neocortex', :}, 2), 3);
 mean_value.FH_std(3) = round(std(FH_Combine{'Neocortex', :}), 3);
+SEM = std(FH_Combine{'Neocortex', :})/sqrt(size(FH_Combine{'Neocortex', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH_Combine{'Neocortex', :}, 2)-1);      % T-Score
+CI = round(mean(FH_Combine{'Neocortex', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(3) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(3) = round(mean(FW_Combine{'Neocortex', :}, 2), 3);
 mean_value.FW_std(3) = round(std(FW_Combine{'Neocortex', :}), 3);
+SEM = std(FW_Combine{'Neocortex', :})/sqrt(size(FW_Combine{'Neocortex', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW_Combine{'Neocortex', :}, 2)-1);      % T-Score
+CI = round(mean(FW_Combine{'Neocortex', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(3) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(3),ci,stats] = ttest2(MH_Combine{'Neocortex', :}',MW_Combine{'Neocortex', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(3),ci,stats] = ttest2(FH_Combine{'Neocortex', :}',FW_Combine{'Neocortex', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(3),ci,stats] = ttest2((MH_Combine{'Neocortex', :} + FH_Combine{'Neocortex', :})',...
@@ -74,12 +136,32 @@ mean_value.FW_std(3) = round(std(FW_Combine{'Neocortex', :}), 3);
 
 mean_value.MH(4) = round(mean(MH_Combine{'Cerebellum', :}, 2), 3);
 mean_value.MH_std(4) = round(std(MH_Combine{'Cerebellum', :}), 3);
+SEM = std(MH_Combine{'Cerebellum', :})/sqrt(size(MH_Combine{'Cerebellum', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH_Combine{'Cerebellum', :}, 2)-1);      % T-Score
+CI = round(mean(MH_Combine{'Cerebellum', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(4) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.MW(4) = round(mean(MW_Combine{'Cerebellum', :}, 2), 3);
 mean_value.MW_std(4) = round(std(MW_Combine{'Cerebellum', :}), 3);
+SEM = std(MW_Combine{'Cerebellum', :})/sqrt(size(MW_Combine{'Cerebellum', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW_Combine{'Cerebellum', :}, 2)-1);      % T-Score
+CI = round(mean(MW_Combine{'Cerebellum', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(4) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(4) = round(mean(FH_Combine{'Cerebellum', :}, 2), 3);
 mean_value.FH_std(4) = round(std(FH_Combine{'Cerebellum', :}), 3);
+SEM = std(FH_Combine{'Cerebellum', :})/sqrt(size(FH_Combine{'Cerebellum', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH_Combine{'Cerebellum', :}, 2)-1);      % T-Score
+CI = round(mean(FH_Combine{'Cerebellum', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(4) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(4) = round(mean(FW_Combine{'Cerebellum', :}, 2), 3);
 mean_value.FW_std(4) = round(std(FW_Combine{'Cerebellum', :}), 3);
+SEM = std(FW_Combine{'Cerebellum', :})/sqrt(size(FW_Combine{'Cerebellum', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW_Combine{'Cerebellum', :}, 2)-1);      % T-Score
+CI = round(mean(FW_Combine{'Cerebellum', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(4) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(4),ci,stats] = ttest2(MH_Combine{'Cerebellum', :}',MW_Combine{'Cerebellum', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(4),ci,stats] = ttest2(FH_Combine{'Cerebellum', :}',FW_Combine{'Cerebellum', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(4),ci,stats] = ttest2((MH_Combine{'Cerebellum', :} + FH_Combine{'Cerebellum', :})',...
@@ -87,12 +169,32 @@ mean_value.FW_std(4) = round(std(FW_Combine{'Cerebellum', :}), 3);
 
 mean_value.MH(5) = round(mean(MH_Combine{'Thalamus', :}, 2), 3);
 mean_value.MH_std(5) = round(std(MH_Combine{'Thalamus', :}), 3);
+SEM = std(MH_Combine{'Thalamus', :})/sqrt(size(MH_Combine{'Thalamus', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH_Combine{'Thalamus', :}, 2)-1);      % T-Score
+CI = round(mean(MH_Combine{'Thalamus', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(5) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.MW(5) = round(mean(MW_Combine{'Thalamus', :}, 2), 3);
 mean_value.MW_std(5) = round(std(MW_Combine{'Thalamus', :}), 3);
+SEM = std(MW_Combine{'Thalamus', :})/sqrt(size(MW_Combine{'Thalamus', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW_Combine{'Thalamus', :}, 2)-1);      % T-Score
+CI = round(mean(MW_Combine{'Thalamus', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(5) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(5) = round(mean(FH_Combine{'Thalamus', :}, 2), 3);
 mean_value.FH_std(5) = round(std(FH_Combine{'Thalamus', :}), 3);
+SEM = std(FH_Combine{'Thalamus', :})/sqrt(size(FH_Combine{'Thalamus', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH_Combine{'Thalamus', :}, 2)-1);      % T-Score
+CI = round(mean(FH_Combine{'Thalamus', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(5) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(5) = round(mean(FW_Combine{'Thalamus', :}, 2), 3);
 mean_value.FW_std(5) = round(std(FW_Combine{'Thalamus', :}), 3);
+SEM = std(FW_Combine{'Thalamus', :})/sqrt(size(FW_Combine{'Thalamus', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW_Combine{'Thalamus', :}, 2)-1);      % T-Score
+CI = round(mean(FW_Combine{'Thalamus', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(5) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(5),ci,stats] = ttest2(MH_Combine{'Thalamus', :}',MW_Combine{'Thalamus', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(5),ci,stats] = ttest2(FH_Combine{'Thalamus', :}',FW_Combine{'Thalamus', :}', 'Vartype', 'unequal');
 [h,mean_value.M_F_P_Value(5),ci,stats] = ttest2((MH_Combine{'Thalamus', :} + FH_Combine{'Thalamus', :})',...
@@ -155,12 +257,32 @@ mean_value.FW_std(9) = round(std(FW_Combine{'Hippocampus', :}), 3);
 
 mean_value.MH(10) = round(mean(MH_Combine{'LGP', :}, 2), 3);
 mean_value.MH_std(10) = round(std(MH_Combine{'LGP', :}), 3);
+SEM = std(MH_Combine{'LGP', :})/sqrt(size(MH_Combine{'LGP', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH_Combine{'LGP', :}, 2)-1);      % T-Score
+CI = round(mean(MH_Combine{'LGP', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(10) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.MW(10) = round(mean(MW_Combine{'LGP', :}, 2), 3);
 mean_value.MW_std(10) = round(std(MW_Combine{'LGP', :}), 3);
+SEM = std(MW_Combine{'LGP', :})/sqrt(size(MW_Combine{'LGP', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW_Combine{'LGP', :}, 2)-1);      % T-Score
+CI = round(mean(MW_Combine{'LGP', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(10) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(10) = round(mean(FH_Combine{'LGP', :}, 2), 3);
 mean_value.FH_std(10) = round(std(FH_Combine{'LGP', :}), 3);
+SEM = std(FH_Combine{'LGP', :})/sqrt(size(FH_Combine{'LGP', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH_Combine{'LGP', :}, 2)-1);      % T-Score
+CI = round(mean(FH_Combine{'LGP', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(10) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(10) = round(mean(FW_Combine{'LGP', :}, 2), 3);
 mean_value.FW_std(10) = round(std(FW_Combine{'LGP', :}), 3);
+SEM = std(FW_Combine{'LGP', :})/sqrt(size(FW_Combine{'LGP', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW_Combine{'LGP', :}, 2)-1);      % T-Score
+CI = round(mean(FW_Combine{'LGP', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(10) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(10),ci,stats] = ttest2(MH_Combine{'LGP', :}',...
     MW_Combine{'LGP', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(10),ci,stats] = ttest2(FH_Combine{'LGP', :}',...
@@ -187,12 +309,32 @@ mean_value.FW_std(11) = round(std(FW_Combine{'Ventricles', :}), 3);
 
 mean_value.MH(12) = round(mean(MH_Combine{'AccumbensNu', :}, 2), 3);
 mean_value.MH_std(12) = round(std(MH_Combine{'AccumbensNu', :}), 3);
+SEM = std(MH_Combine{'AccumbensNu', :})/sqrt(size(MH_Combine{'AccumbensNu', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MH_Combine{'AccumbensNu', :}, 2)-1);      % T-Score
+CI = round(mean(MH_Combine{'AccumbensNu', :}, 2) + ts*SEM, 3);     
+mean_value.MH_CI(12) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.MW(12) = round(mean(MW_Combine{'AccumbensNu', :}, 2), 3);
 mean_value.MW_std(12) = round(std(MW_Combine{'AccumbensNu', :}), 3);
+SEM = std(MW_Combine{'AccumbensNu', :})/sqrt(size(MW_Combine{'AccumbensNu', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(MW_Combine{'AccumbensNu', :}, 2)-1);      % T-Score
+CI = round(mean(MW_Combine{'AccumbensNu', :}, 2) + ts*SEM, 3);     
+mean_value.MW_CI(12) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FH(12) = round(mean(FH_Combine{'AccumbensNu', :}, 2), 3);
 mean_value.FH_std(12) = round(std(FH_Combine{'AccumbensNu', :}), 3);
+SEM = std(FH_Combine{'AccumbensNu', :})/sqrt(size(FH_Combine{'AccumbensNu', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FH_Combine{'AccumbensNu', :}, 2)-1);      % T-Score
+CI = round(mean(FH_Combine{'AccumbensNu', :}, 2) + ts*SEM, 3);     
+mean_value.FH_CI(12) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 mean_value.FW(12) = round(mean(FW_Combine{'AccumbensNu', :}, 2), 3);
 mean_value.FW_std(12) = round(std(FW_Combine{'AccumbensNu', :}), 3);
+SEM = std(FW_Combine{'AccumbensNu', :})/sqrt(size(FW_Combine{'AccumbensNu', :}, 2));               % Standard Error
+ts = tinv([0.025  0.975],size(FW_Combine{'AccumbensNu', :}, 2)-1);      % T-Score
+CI = round(mean(FW_Combine{'AccumbensNu', :}, 2) + ts*SEM, 3);     
+mean_value.FW_CI(12) = join(['(', join(string(CI), ", "), ')'], ''); 
+
 [h,mean_value.MH_MW_P_Value(12),ci,stats] = ttest2(MH_Combine{'AccumbensNu', :}',...
     MW_Combine{'AccumbensNu', :}', 'Vartype', 'unequal');
 [h,mean_value.FH_FW_P_Value(12),ci,stats] = ttest2(FH_Combine{'AccumbensNu', :}',...
