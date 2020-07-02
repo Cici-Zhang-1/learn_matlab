@@ -25,7 +25,7 @@ FW_Up_Part = [];
 FW_Down_Part = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus LGP
 % PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'LGP';
+type = 'CaudatePutamen';
 for i = 1:size(filename, 1)
     Mean = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'Mean');
     MH_Part(1, i) = Mean{type, 'MH'};
@@ -133,7 +133,7 @@ xticks([3 5 7]);
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 if strcmp(type, 'CaudatePutamen')
 %     ylim([14 22]);
-    ylim([16 22]);
+    ylim([16 21.5]);
 elseif strcmp(type, 'Neocortex')
 %     ylim([70 110])
     ylim([75 100]);
@@ -163,17 +163,17 @@ ax.FontSize = 16;
 lgd = legend([p1 p2 p3 p4],{'MWT', 'MHD', 'FWT', 'FHD'}, 'Location', 'northwest', 'FontSize', 12);
 legend('boxoff');
 if strcmp(type, 'LGP')
-    title(lgd, 'Male Lateral Globus Pallidus');
+    title(lgd, 'Lateral Globus Pallidus');
 elseif strcmp(type, 'CaudatePutamen')
-    title(lgd, 'Male Striatum');
+    title(lgd, 'Striatum');
 else
-    title(lgd, ['Male ' type]);
+    title(lgd, type);
 end
 
 if strcmp(type, 'CC/ExternalCapsule')
-    saveas(gcf,sprintf('M_%s.png', 'CC_ExternalCapsule'))
+    saveas(gcf,sprintf('%sA_%s.png', folder, 'CC_ExternalCapsule'))
 else
-    saveas(gcf,sprintf('M_%s.png', type))
+    saveas(gcf,sprintf('%sA_%s.png', folder, type))
 end
 
 % legend('MH', 'MW', 'FH', 'FW', 'MH-', 'MW-', 'FH-', 'FW-');

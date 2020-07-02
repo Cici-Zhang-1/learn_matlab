@@ -22,7 +22,7 @@ Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
 
-type = 'CaudatePutamen';
+type = 'Cerebellum';
 starts = 0;
 for i = 1:size(filename, 1)
     MW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'MW_Combine');
@@ -42,7 +42,7 @@ opts = statset('nlinfit');
 opts.RobustWgtFun = [];
 
 beta0 = [1 1 20];
-x1 = linspace(3,7)';
+x1 = linspace(3,7, 29)';
 mdlW = fitnlm(x,MW,model,beta0, 'ErrorModel', 'combined', 'Options', opts);
 %disp(mdlW)
 [yMW,yci] = predict(mdlW,x1);
@@ -76,7 +76,7 @@ pC.FaceAlpha = 0.6;
 p1 = plot(x1,yMW, 'Color', [0 0.66 0.52], 'LineWidth', 3);
 p2 = plot(x1,yMH, 'Color', [0.9 0.38 0.38], 'LineWidth', 3);
 
-xlim([3 7]);
+xlim([2.8 7.2]);
 xticks([3 5 7]);
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'

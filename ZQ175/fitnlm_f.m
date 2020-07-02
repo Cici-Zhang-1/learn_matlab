@@ -21,7 +21,7 @@ Combine = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
 
-type = 'AccumbensNu';
+type = 'LGP';
 starts = 0;
 for i = 1:size(filename, 1)
     FW_Combine = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'FW_Combine');
@@ -33,7 +33,7 @@ for i = 1:size(filename, 1)
     starts = ends;
 end
 
-x = [repmat(21, 6, 1); repmat(35, 6, 1); repmat(49, 6, 1)];
+x = [repmat(3, 6, 1); repmat(5, 6, 1); repmat(7, 6, 1)];
 
 model = @(b, t) b(:, 1).*t.^2 + b(:, 2).*t + b(:, 3);
 
@@ -41,7 +41,7 @@ opts = statset('nlinfit');
 opts.RobustWgtFun = 'bisquare';
 
 beta0 = [1 1 20];
-x1 = linspace(21,49)';
+x1 = linspace(3,7, 29)';
 mdlW = fitnlm(x,FW,model,beta0, 'Options', opts);
 disp(mdlW);
 [yFW,yci] = predict(mdlW,x1);
@@ -76,8 +76,8 @@ p1 = plot(x1,yFW, 'Color', [0.13 0.46 0.54], 'LineWidth', 3);
 p2 = plot(x1,yFH, 'Color', [0.69 0.164 0.531], 'LineWidth', 3);
 
 
-xlim([20 50]);
-xticks([21 35 49]);
+xlim([2.8 7.2]);
+xticks([3 5 7]);
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
 if strcmp(type, 'CaudatePutamen')
@@ -113,7 +113,7 @@ elseif strcmp(type, 'Amygdala')
 else
 end
 % ylim([15 25]);
-xlabel('Days', 'FontSize', 18);
+xlabel('Weeks', 'FontSize', 18);
 ylabel('Volume(mm^3)', 'FontSize', 18);
 
 ax = gca; % current axes
@@ -124,6 +124,8 @@ legend('boxoff');
 
 if strcmp(type, 'LGP')
     title(lgd, 'Female Lateral Globus Pallidus');
+elseif strcmp(type, 'CaudatePutamen')
+    title(lgd, 'Female Striatum');
 else
     title(lgd, ['Female ' type]);
 end

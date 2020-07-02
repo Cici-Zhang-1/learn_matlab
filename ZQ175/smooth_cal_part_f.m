@@ -3,7 +3,7 @@ close all;
 if ispc
     folder = 'F:\T2-1\Analysis\';
 elseif ismac
-    folder = '/Users/chuangchuangzhang/Downloads/Analysis/';
+    folder = '/Users/chuangchuangzhang/Documents/Data/StructureMRI/ZQ175/';
 elseif isunix
 else
 end
@@ -17,7 +17,7 @@ FW_Part = [];
 FW_Up_Part = [];
 FW_Down_Part = [];
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
-type = 'CaudatePutamen';
+type = 'Cerebellum';
 for i = 1:size(filename, 1)
     Mean = readtable([folder filename(i, :) no '.xlsx'], 'ReadVariableNames', true, 'ReadRowNames', true, 'Sheet', 'Mean');
     FH_Part(1, i) = Mean{type, 'FH'};
@@ -30,10 +30,10 @@ for i = 1:size(filename, 1)
     FW_Down_Part(1, i) = FW_Part(1, i) - t;
 end
 
-x = [21, 35, 49];
+x = [3, 5, 7];
 figure;
 
-x1 = linspace(21,49)';
+x1 = linspace(3, 7, 29)';
 smoothtype = 'smoothingspline';
 %MW
 [cMW, gof, output] = fit(x', FW_Part', smoothtype);
@@ -76,8 +76,8 @@ hold on
 p2 = plot(x1,yMH, 'Color', [0.69 0.164 0.531], 'LineWidth', 3);
 hold off
 
-xlim([20 50]);
-xticks([21 35 49]);
+xlim([2.8 7.2]);
+xticks([3 5 7]);
 if strcmp(type, 'CaudatePutamen')
 %     ylim([14 22]);
     ylim([16 21]);
@@ -100,20 +100,26 @@ elseif strcmp(type, 'Brain')
     ylim([350 500]);
 else
 end
-xlabel('Days', 'FontSize', 18);
-ylabel('Volumn(mm^3)', 'FontSize', 18);
+xlabel('Weeks', 'FontSize', 18);
+ylabel('Volume(mm^3)', 'FontSize', 18);
 
 ax = gca; % current axes
 ax.FontSize = 16;
 
 lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
 legend('boxoff');
-title(lgd, ['Female ' type]);
+if strcmp(type, 'LGP')
+    title(lgd, 'Female Lateral Globus Pallidus');
+elseif strcmp(type, 'CaudatePutamen')
+    title(lgd, 'Female Striatum');
+else
+    title(lgd, ['Female ' type]);
+end
 
 if strcmp(type, 'CC/ExternalCapsule')
-    saveas(gcf,sprintf('F_%s.png', 'CC_ExternalCapsule'));
+    saveas(gcf,sprintf('%sF_%s.png', folder, 'CC_ExternalCapsule'));
 else
-    saveas(gcf,sprintf('F_%s.png', type));
+    saveas(gcf,sprintf('%sF_%s.png', folder, type));
 end
 
 % legend('MH', 'MW', 'FH', 'FW', 'MH-', 'MW-', 'FH-', 'FW-');

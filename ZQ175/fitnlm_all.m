@@ -157,18 +157,18 @@ ylabel('Volume(mm^3)', 'FontSize', 18);
 ax = gca; % current axes
 ax.FontSize = 16;
 
-lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
+lgd = legend([p1 p2 p3 p4],{'MWT', 'MHD', 'FWT', 'FHD'}, 'Location', 'northwest', 'FontSize', 12);
 legend('boxoff');
 if strcmp(type, 'LGP')
-    title(lgd, 'Male Lateral Globus Pallidus');
+    title(lgd, 'Lateral Globus Pallidus');
 elseif strcmp(type, 'CaudatePutamen')
-    title(lgd, 'Male Striatum');
+    title(lgd, 'Striatum');
 else
-    title(lgd, ['Male ' type]);
+    title(lgd, type);
 end
 
 if strcmp(type, 'CC/ExternalCapsule')
-    saveas(gcf,sprintf('%sM_%s.png', folder, 'CC_ExternalCapsule'))
+    saveas(gcf,sprintf('%sA_%s.png', folder, 'CC_ExternalCapsule'))
 else
-    saveas(gcf,sprintf('%sM_%s.png', folder, type))
+    saveas(gcf,sprintf('%sA_%s.png', folder, type))
 end
