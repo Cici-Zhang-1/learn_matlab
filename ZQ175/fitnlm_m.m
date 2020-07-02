@@ -34,7 +34,7 @@ for i = 1:size(filename, 1)
     starts = ends;
 end
 
-x = [repmat(21, 6, 1); repmat(35, 6, 1); repmat(49, 6, 1)];
+x = [repmat(3, 6, 1); repmat(5, 6, 1); repmat(7, 6, 1)];
 
 model = @(b, t) b(:, 1).*t.^2 + b(:, 2).*t + b(:, 3);
 
@@ -42,7 +42,7 @@ opts = statset('nlinfit');
 opts.RobustWgtFun = [];
 
 beta0 = [1 1 20];
-x1 = linspace(21,49)';
+x1 = linspace(3,7)';
 mdlW = fitnlm(x,MW,model,beta0, 'ErrorModel', 'combined', 'Options', opts);
 %disp(mdlW)
 [yMW,yci] = predict(mdlW,x1);
@@ -76,8 +76,8 @@ pC.FaceAlpha = 0.6;
 p1 = plot(x1,yMW, 'Color', [0 0.66 0.52], 'LineWidth', 3);
 p2 = plot(x1,yMH, 'Color', [0.9 0.38 0.38], 'LineWidth', 3);
 
-xlim([20 50]);
-xticks([21 35 49]);
+xlim([3 7]);
+xticks([3 5 7]);
 % Brain CaudatePutamen Neocortex Cerebellum Thalamus PeriformCortex Hypothalamus CC/ExternalCapsule
 % 'Hippocampus', 'LGP', 'Ventricles', 'AccumbensNu', 'Amygdala'
 if strcmp(type, 'CaudatePutamen')
@@ -113,8 +113,8 @@ elseif strcmp(type, 'Amygdala')
 else
 end
 % ylim([15 25]);
-xlabel('Days', 'FontSize', 18);
-ylabel('Volumn(mm^3)', 'FontSize', 18);
+xlabel('Weeks', 'FontSize', 18);
+ylabel('Volume(mm^3)', 'FontSize', 18);
 
 ax = gca; % current axes
 ax.FontSize = 16;
@@ -123,6 +123,8 @@ lgd = legend([p1 p2],{'WT', 'HD'}, 'Location', 'northwest', 'FontSize', 12);
 legend('boxoff');
 if strcmp(type, 'LGP')
     title(lgd, 'Male Lateral Globus Pallidus');
+elseif strcmp(type, 'CaudatePutamen')
+    title(lgd, 'Male Striatum');
 else
     title(lgd, ['Male ' type]);
 end

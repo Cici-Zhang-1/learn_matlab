@@ -114,7 +114,7 @@ else
 end
 % ylim([15 25]);
 xlabel('Days', 'FontSize', 18);
-ylabel('Volumn(mm^3)', 'FontSize', 18);
+ylabel('Volume(mm^3)', 'FontSize', 18);
 
 ax = gca; % current axes
 ax.FontSize = 16;
